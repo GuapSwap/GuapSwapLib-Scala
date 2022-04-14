@@ -1,2 +1,2 @@
-# GuapSwapLib-Scala
-GuapSwap library written in Scala.
+# guapswaplib-scala
+GuapSwapLib library written in Scala.
