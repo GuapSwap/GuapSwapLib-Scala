@@ -14,7 +14,7 @@ lazy val root = project
     ),
 
     githubOwner := "lucagdangelo",
-    githubRepository := "guapswaplib-scala"
+    githubRepository := "guapswaplib-scala",
 
     ThisBuild / versionScheme := Some("semver-spec"),
     assembly / assemblyJarName := s"${name.value}-${version.value}.jar",
