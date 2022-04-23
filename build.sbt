@@ -1,3 +1,6 @@
+val scala3Version = "3.1.2"
+val scala2Version = "2.12.15"
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -5,10 +8,11 @@ lazy val root = project
     organization := "guapswap",
     name := "guapswaplib-scala",
     version := "0.1.0-beta",
-    scalaVersion := "2.12.15",
+    scalaVersion := scala3Version,
+    crossScalaVersions := Seq(scala3Version, scala2Version),
 
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.2.9" % Test,
+      "org.scalameta" %% "munit" % "0.7.29" % Test,
       "org.ergoplatform" %% "ergo-appkit" % "4.0.8",
       "com.google.code.gson" % "gson" % "2.8.5",
     ),
