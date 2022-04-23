@@ -2,7 +2,7 @@ lazy val root = project
   .in(file("."))
   .settings(
 
-    organization := "GuapSwap",
+    organization := "guapswap",
     name := "guapswaplib-scala",
     version := "0.1.0-beta",
     scalaVersion := "2.12.15",
@@ -13,7 +13,7 @@ lazy val root = project
       "com.google.code.gson" % "gson" % "2.8.5",
     ),
 
-    githubOwner := "GuapSwap",
+    githubOwner := "guapswap",
     githubRepository := "guapswaplib-scala",
     githubTokenSource := TokenSource.GitConfig("github.token"),
 
