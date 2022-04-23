@@ -13,6 +13,10 @@ lazy val root = project
       "com.google.code.gson" % "gson" % "2.8.5",
     ),
 
+    scmInfo := Some(
+      ScmInfo(url("https://github.com/guapswap/guapswaplib-scala"), "scm:git@github.com:guapswap/guapswaplib-scala.git")
+    ),
+
     githubOwner := "guapswap",
     githubRepository := "guapswaplib-scala",
     githubTokenSource := TokenSource.GitConfig("github.token"),
