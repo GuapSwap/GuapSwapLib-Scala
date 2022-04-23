@@ -15,7 +15,7 @@ lazy val root = project
 
     githubOwner := "GuapSwap",
     githubRepository := "guapswaplib-scala",
-    githubTokenSource := TokenSource.Environment("GUAPSWAP_GITHUB_TOKEN"),
+    githubTokenSource := TokenSource.GitConfig("github.token"),
 
     ThisBuild / versionScheme := Some("semver-spec"),
     assembly / assemblyJarName := s"${name.value}-${version.value}.jar",
