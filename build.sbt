@@ -8,7 +8,7 @@ inThisBuild(List(
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
 
-  scalaVersion := "2.12.15"
+  scalaVersion := "2.12.15",
   libraryDependencies ++= Seq(
     "org.scalameta" %% "munit" % "0.7.29" % Test,
     "org.ergoplatform" %% "ergo-appkit" % "4.0.9",
