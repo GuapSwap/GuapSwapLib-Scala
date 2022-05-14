@@ -14,4 +14,4 @@ jobs:
           distribution: temurin
           java-version: openjdk@1.17
       - name: Unit Tests
-        run: sbt test
+      - run: sbt test
