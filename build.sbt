@@ -2,8 +2,16 @@ inThisBuild(List(
   
   organization := "org.guapswap",  // groupId
   name := "guapswaplib-scala",     // artifactId
+  homepage := Some(url("https://github.com/GuapSwap/guapswaplib-scala")),
   licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   description := "GuapSwapLib library written in Scala.",
+  developers := List(
+    Developer(
+      "lgd",
+      "Luca D'Angelo",
+      url("https://github.com/lucagdangelo")
+    )
+  ),
   
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
