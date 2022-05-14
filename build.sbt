@@ -5,14 +5,6 @@ inThisBuild(List(
   licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   description := "GuapSwapLib library written in Scala.",
   
-  developers := List(
-    Developer(
-      "guapswap",
-      "Luca D'Angelo",
-      "ldgaetano@protonmail.com"
-    )
-  ),
-  
   sonatypeCredentialHost := "s01.oss.sonatype.org",
   sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
 
