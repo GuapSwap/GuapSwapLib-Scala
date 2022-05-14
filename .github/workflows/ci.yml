@@ -1,0 +1,16 @@
+name: Continuous Integration
+on: push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2 # Retrieve the content of the repository
+      - uses: actions/setup-scala@v12 # Set up scala
+        with:
+          distribution: temurin
+          java-version: openjdk@1.17
+      - name: Unit Tests # Custom action consisting of a shell command
+        run: sbt +test
