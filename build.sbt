@@ -9,6 +9,7 @@ inThisBuild(List(
     Developer(
       "lgd",
       "Luca D'Angelo",
+      "ldgaetano@protonmail.com",
       url("https://github.com/lucagdangelo")
     )
   ),
