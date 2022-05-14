@@ -12,9 +12,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Exit if not on master or main branch
-        if: (endsWith(github.ref, 'master') || endsWith(github.ref, 'main')) == false) 
-        run: exit -1
+      - name: Check Branch
+        if: endsWith(github.ref, 'master') == false
+          run: exit -1
+        if: endsWith(github.ref, 'main') == false
+          run exit -1
       
       - name: Setup Scala
       - uses: olafurpg/setup-scala@v13
