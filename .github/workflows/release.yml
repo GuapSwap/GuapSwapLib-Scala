@@ -1,7 +1,8 @@
 name: Release
 on:
   push:
-    tags: [v*]
+    tags:
+      - v*
 
 jobs:
   publish:
@@ -13,9 +14,8 @@ jobs:
           fetch-depth: 0
 
       - name: Check Branch
-        if: endsWith(github.ref, 'master') == false
-          if: endsWith(github.ref, 'main') == false
-            run: exit -1
+        if: github.ref != 'refs/heads/main'
+          run: exit 1
       
       - name: Setup Scala
       - uses: olafurpg/setup-scala@v13
