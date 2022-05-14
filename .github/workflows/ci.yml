@@ -12,6 +12,6 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: openjdk@1.17
+          java-version: openjdk@17.0.1
       - name: Unit Tests
         run: sbt test
