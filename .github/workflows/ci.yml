@@ -7,10 +7,10 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2 # Retrieve the content of the repository
-      - uses: actions/setup-scala@v12 # Set up scala
+      - uses: actions/checkout@v2.3.4
+      - uses: olafurpg/setup-scala@v13
         with:
           distribution: temurin
           java-version: openjdk@1.17
-      - name: Unit Tests # Custom action consisting of a shell command
+      - name: Unit Tests
         run: sbt +test
