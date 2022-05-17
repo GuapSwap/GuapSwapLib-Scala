@@ -84,7 +84,7 @@
 
             // Substituion of constants in ErgoTree template bytes 
             val newDexSwapSellErgoTreeBytes: Coll[Coll[Byte]] = ergoTreeTemplateBytesAndRecipientAddressesPair.map({(ergoTreeTemplateBytes: Coll[Byte], recipientAddress: SigmaProp) => getNewDexSwapSellErgoTreeBytes(ergoTreeTemplateBytes, recipientAddress)})
-            val newDexSwapSellErgoTreeBytesAndPayoutPercentageValues: Coll[(Coll[Byte], Long)] = newDexSwapSellErgoTreeBytes.zip(payoutPercentageValues)
+            val newDexSwapSellErgoTreeBytesAndPayoutPercentageValuesPair: Coll[(Coll[Byte], Long)] = newDexSwapSellErgoTreeBytes.zip(payoutPercentageValues)
 
             // Check conditions for a valid GuapSwap Tx
             val validGuapSwap: Boolean = {
@@ -93,7 +93,7 @@
                 val validDexSwapBoxes: Boolean = {
 
                     val dexSwapBoxes: Coll[Box] = OUTPUTS.slice(0, OUTPUTS.size-2)
-                    val dexSwapBoxesAndNewDexSwapSellErgoTreeBytesAndPayoutPercentageValuesPair: Coll[(Box, (Coll[Byte], Long))] = dexSwapBoxes.zip(newDexSwapSellErgoTreeBytesAndPayoutPercentageValues)
+                    val dexSwapBoxesAndNewDexSwapSellErgoTreeBytesAndPayoutPercentageValuesPair: Coll[(Box, (Coll[Byte], Long))] = dexSwapBoxes.zip(newDexSwapSellErgoTreeBytesAndPayoutPercentageValuesPair)
 
                     allOf(Coll(
                         
