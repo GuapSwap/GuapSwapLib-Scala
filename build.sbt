@@ -7,7 +7,7 @@ inThisBuild(List(
   description := "GuapSwapLib library written in Scala.",
   scmInfo := Some(
     ScmInfo(
-      url(https://github.com/GuapSwap/guapswaplib-scala),
+      url("https://github.com/GuapSwap/guapswaplib-scala"),
       "scm:git@github.com:GuapSwap/guapswaplib-scala.git"
     )
   ),
