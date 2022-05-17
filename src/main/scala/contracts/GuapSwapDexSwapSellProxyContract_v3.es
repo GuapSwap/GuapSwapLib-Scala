@@ -104,7 +104,7 @@
                         isValidPayoutPercentages(payoutPercentageFractions),       
                         
                         // Check that the payout value is greater than the total dex fee for that particular swap
-                        payoutPercentageValuesAndIndividualTotalDexFeesPair.forAll({(payoutPercentageValue: Long, individualTotalDexFee: Long) => payoutPercentageValue > individualTotalDexFee})
+                        payoutPercentageValuesAndIndividualTotalDexFeesPair.forAll({(payoutPercentageValue: Long, individualTotalDexFee: Long) => payoutPercentageValue > individualTotalDexFee}),
 
                         // Check that the dex box value equals the payout percentage value
                         dexSwapBoxesAndNewDexSwapSellErgoTreeBytesAndPayoutPercentageValuesPair.forAll({(element: (Box, (Coll[Byte], Long))) => element._1.value == element._2._2}),
