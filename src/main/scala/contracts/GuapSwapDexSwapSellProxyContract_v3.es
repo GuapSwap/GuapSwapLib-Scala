@@ -67,8 +67,8 @@
             val IndividualTotalDexFees: Coll[Long] = getVar[Coll[Long]](4).get
             
             // Other variables derived from context extension variables for GuapSwap Tx
-            val payoutPercentageFractions: Coll[(Long, Long)] = SwapTokenParams.flatMap(swapTokenParam: ((Long, Long), SigmaProp) => swapTokenParam._1)
-            val recipientAddresses: Coll[SigmaProp] = SwapTokenParams.flatMap(swapTokenParam: ((Long, Long), SimgaProp) => swapTokenParam._2)
+            val payoutPercentageFractions: Coll[(Long, Long)] = SwapTokenParams.flatMap({(swapTokenParam: ((Long, Long), SigmaProp)) => swapTokenParam._1})
+            val recipientAddresses: Coll[SigmaProp] = SwapTokenParams.flatMap({(swapTokenParam: ((Long, Long), SimgaProp)) => swapTokenParam._2})
             val ergoTreeTemplateBytesANDrecipientAddressesPair: Coll[(Coll[Byte], SigmaProp)] = DexSwapSellErgoTreeTemplateBytes.zip(recipientAddresses)
 
             // Fee variables for GuapSwap Tx
