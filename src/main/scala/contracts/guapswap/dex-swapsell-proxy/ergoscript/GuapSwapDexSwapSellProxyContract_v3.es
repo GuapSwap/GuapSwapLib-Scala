@@ -168,13 +168,13 @@
     def isValidPayoutPercentages(_payoutPercentageFractions: Coll[(Long, Long)]): Boolean = {
 
         // Calculate the product of the payout percentage denominators
-        val productOfPayoutPercentageDenoms: Long = _payoutPercentages.fold(1L, {(prod: Long, (payoutPercentageNum: Long, payoutPercentageDenom: Long)) => prod *  payoutPercentageDenom})
+        val productOfPayoutPercentageDenoms: Long = _payoutPercentages.fold(1L, {(prod: Long, (payoutPercentageNum: Long, payoutPercentageDenom: Long)) => prod * payoutPercentageDenom})
 
-        // Calculate the sum of the products of the payout percentages
-        val sumOfProductsOfPayoutPercentages: Long = _payoutPercentages.fold(0L {(acc: Long, (payoutPercentageNum: Long, payoutPercentageDenom: Long)) => acc + ((payoutPercentageNum * productOfPayoutPercentageDenoms) / payoutPercentageDenom)})
+        // Calculate the sum of the products of the payout percentages and the product of the payout percentage denominators
+        val sumOfProductsOfPayoutPercentagesAndProductOfPayoutPercentageDenoms: Long = _payoutPercentages.fold(0L {(acc: Long, (payoutPercentageNum: Long, payoutPercentageDenom: Long)) => acc + ((payoutPercentageNum * productOfPayoutPercentageDenoms) / payoutPercentageDenom)})
 
         // Check for equality
-        sumOfProductsOfPayoutPercentages == productOfPayoutPercentageDenoms
+        sumOfProductsOfPayoutPercentagesAndProductOfPayoutPercentageDenoms == productOfPayoutPercentageDenoms
     }
 
     // Calculate the payout ratio for each token to swap => assumes valid percentage ratios
