@@ -56,6 +56,7 @@
             OUTPUTS.size-3
 
         }
+
     }
 
     // Fee variables for GuapSwap Tx
@@ -234,7 +235,7 @@
 
         // Check that percentage error falls within margins
         (percentageError < 3L) && (percentageError > -3L)
-    
+        
     }
    
 }
