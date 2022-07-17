@@ -1,72 +1,84 @@
 {
     // ===== Contract Information =====  //
-    // Name: GuapSwapDexSwapSellProxyContract
-    // Description: Proxy contract that holds the miner's payout from the mining pool and will perform a swap-sell with a dex or a refund.
-    // Version: 3.0
+    // Name: GuapSwapProxyContract
+    // Description: Proxy contract that holds the miner's payout from the mining pool and will perform a swap with a dex or a refund.
+    // Version: 3.0.0
     // Author: Luca D'Angelo
 
     // ===== GuapSwap Proxy Box ===== //
-    // Value: MinerPayout (ERG)
+    // Value: MinerPayout (ERG) || MinERGForExistance
     // Registers: None
-    // Tokens: None
-    
-    // ===== Mining Pool Payout Tx ===== //
-    // Description: This tx sends the miner their share of the mining profits for the block(s) found by the mining pool.
-    // Inputs: MiningPoolBox
-    // DataInputs: None
-    // Context Extension Variables: None
-    // Outputs: DexSwapSellProxyBox
+    // Tokens: 
+    //  TokenX: MinerPayout || None
 
     // ===== GuapSwap Tx ===== //
     // Description: The miner is able to swap their ERG for a maximum of 10 unique tokens. The amount of each token can be in any percentage ratio of the input payout, and sent to anyone. 
-    // Inputs: DexSwapSellProxyBox(es)
     // DataInputs: None
-    // Context Extension Variables: TxTypeID: Int, ProtocolMinerFee: Long, GuapSwapDatums: Coll((((recipientAddress: SigmaProp, propBytes: Coll[Byte]), (payoutPercentageNum: Long, payoutPercentageDenom: Long)), ((dexID: Int, dexFee: Long), tokenID: Coll[Byte])))
-    // Outputs: DexSwapSellBox(es) => (ERG, DEX_1, DEX_2, ... , DEX_N), ProtocolFeeBox, ProtocolMinerFeeBox
+    // Inputs: GuapSwapProxyBox
+    // Context Extension Variables: TxTypeID: Byte, GuapSwapMinerFee: Long, GuapSwaps: Coll[(baseTokenID: Coll[Byte], Coll[(((swapTokenID: Coll[Byte], (percentageOfBaseTokenPayoutNum: Long, percentageOfBaseTokenPayoutDenom: Long)), receiverAddress: SigmaProp), ((dexID: Byte, dexSwapBoxPropositionBytes: Coll[Byte]), (dexSwapTypeID: Byte, dexFee: Long)))])]
+    // Outputs: DexSwapBoxes, MinerFundBox, MinerBox
 
     // ===== Refund Tx ===== //
     // Description: Refund the mining payout funds locked within this proxy contract back to the user. 
-    // Inputs: DexSwapSellProxyBox(es)
+    // Inputs: GuapSwapProxyBox   
     // DataInputs: None
     // Context Extension Variables: None
-    // Outputs: RefundBox, ProtocolMinerFeeBox
+    // Outputs: RefundBox, MinerFundBox, MinerBox
 
     // ===== GuapSwap Tx Types ===== //
     // 0 => Refund
     // 1 => GuapSwap Tx
 
-    // ===== GuapSwap Dex Datum IDs ===== //
+    // ===== GuapSwap Dex IDs ===== //
     // 0 => ERG
     // 1 => ErgoDex
 
+    // ===== GuapSwap Dex Swap Type IDs ===== //
+    // 0 => ERG2ERG
+    // 1 => ERG2Token
+    // 2 => Token2ERG
+    // 3 => Token2Token
+
     // ===== Hard-Coded Constants ===== //
     val UserPK: SigmaProp = _UserPK
-    val ProtocolFeePercentageNum: Long = _ProtocolFeePercentageNum
-    val ProtocolFeePercentageDenom: Long = _ProtocolFeePercentageDenom
-    val ProtocolFeeContractHash: Coll[Byte] = _ProtocolFeeContractHash
+    val GuapSwapFeePercentageNum: Long = _GuapSwapFeePercentageNum
+    val GuapSwapFeePercentageDenom: Long = _GuapSwapFeePercentageDenom
+    val MinerFundContractHash: Coll[Byte] = blake2b256(_MinerFundContract)
+    val BaseTokenIDs: Coll[Coll[Byte]] = _BaseTokenIDs
 
-    val ERG_TokenID: Coll[Byte] = _ERG_TokenID
-    val SigUSD_TokenID: Coll[Byte] = _SigUSD_TokenID
-    val SigRSV_TokenID: Coll[Byte] = _SigRSV_TokenID
-    val tokenIDCollection: Coll[Coll[Byte]] = Coll(ERG_TokenID, SigUSD_TokenID, SigRSV_TokenID)
+    val ERGTokenID: Coll[Byte] = _ERGTokenID
+    val SigUSDTokenID: Coll[Byte] = _SigUSDTokenID
+    val SigRSVTokenID: Coll[Byte] = _SigRSVTokenID
+    val tokenIDs: Coll[Coll[Byte]] = Coll(ERGTokenID, SigUSDTokenID, SigRSVTokenID)
     
     // ===== Initial Context Extension Variables ===== //
-    val TxTypeID: Int = getVar[Int](0).get
-    val ProtocolMinerFee: Long = getVar[Long](1).get
+    val TxTypeID: Byte = getVar[Byte](0).get
+    val GuapSwapMinerFee: Long = getVar[Long](1).get
 
     // ===== Initial Variables ===== //
-    val totalPayout: Long = INPUTS.fold(0L. {(acc: Long, input: Box) => acc + input.value})
+    val isRefundTx: Boolean = (TxTypeID == 0.toByte)
+    val isGuapSwapTx: Boolean = (TxTypeID == 1.toByte)
+
 
     // Check tx type based on ID
-    if (TxTypeID == 0) {
+    if (isRefundTx) {
 
-        // ===== Perform Refund Tx ===== //
+        // ===== Inputs ===== //
+        val guapswapProxyBoxesIN: Coll[Box] = INPUTS
+
+        // ===== Outputs ===== //
+        val refundBoxOUT: Box = OUTPUTS(0)
+        val minerFundBoxOUT: Box = OUTPUTS(1)
+        val minerBox: Box = OUTPUTS(2)
+
+        // ===== Relevant Variables ===== //
+        val totalERGPayout: Long = guapswapProxyBoxesIN.fold(0L, { (acc: Long, input: Box) => acc + input.value })
 
         // Check conditions for a valid refund tx
-        val validRefundTx: Boolean = {
+        val valid_RefundTx: Boolean = {
 
             // Check that the inputs are only DexSwapSellProxyBoxes
-            val validDexSwapSellProxyBoxes: Boolean = {
+            val valid_GuapSwapProxyBoxes: Boolean = {
 
                 // All inputs to the tx must have the DexSwapSellProxy contract
                 (INPUTS.forall({(input: Box) => input.propositionBytes == SELF.propositionBytes}))
@@ -74,9 +86,8 @@
             }
 
             // Check for a valid refund box
-            val validRefundBox: Boolean = {
-
-                val refundBox: Box = OUTPUTS(0)                          // The first output box should be the refund box
+            val valid_RefundBox: Boolean = {
+                
                 val refundAmount: Long = totalPayout - ProtocolMinerFee  // The refund amount takes into account the protocol miner fee
 
                 allOf(Coll(
@@ -86,33 +97,135 @@
 
             }
 
+            val valid_MinerFundBoxOUT: Boolean = {
+
+            }
+
+            val valid_MinerBox: Boolean = {
+
+            }
+
             // Check for valid output size
-            val validOutputSize: Boolean = {
+            val valid_OutputSize: Boolean = {
                 (OUTPUTS.size == 2)
             }
 
             allOf(Coll(
-                validDexSwapSellProxyBoxes,
-                validRefundBox,
-                validOutputSize
+                valid_GuapSwapProxyBoxes,
+                valid_RefundBox,
+                valid_OutputSize
             ))
 
         }
 
-        sigmaProp(validRefundTx) && UserPK
+        sigmaProp(valid_RefundTx) && UserPK
 
-    } else if (TxTypeID == 1) {
+    } else if (isGuapSwapTx) {
 
-        // ===== Perform GuapSwap Tx ===== //
+        // ===== Inputs ===== //
+        val guapswapProxyBoxesIN: Coll[Box] = INPUTS.filter({ input => input.propositionBytes == SELF.propositionBytes })
 
-        // Additional Context Extension Variables
-        val GuapSwapDatums: Coll((((SigmaProp, Coll[Byte]), (Long, Long)), ((Int, Long), Coll[Byte]))) = getVar[Coll((((SigmaProp, Coll[Byte]), (Long, Long)), ((Int, Long), Int)))].getOrElse(Coll((((UserPK, UserPK.propBytes), (1L, 1L)), ((0, 1L), Coll(0.toByte))))) = Coll((((recipientAddress: SigmaProp, propBytes: Coll[Byte]), (payoutPercentageNum: Long, payoutPercentageDenom: Long)), ((dexID: Int, dexFee: Long), tokenID: Coll[Byte])))
+        // ===== Outputs ===== //
+        val dexSwapBoxesOUT: Coll[Box] = OUTPUTS.slice(0, OUTPUTS.size-2)
+        val minerFundBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
+        val minerBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
+
+        // ===== Relevant Variables ===== //
+        val totalERGPayout: Long = guapswapProxyBoxesIN.fold(0L, { (acc: Long, input: Box) => acc + input.value })
+
+
+        // ===== Additional Context Extension Variables ===== //
+        val guapswaps = getVar[Coll[(Coll[Byte], Coll[(((Coll[Byte], (Long, Long)), SigmaProp), ((Byte, Coll[Byte]), (Byte, Long)))])]](2).get
+        val ergGuapSwap = guapswaps.filter(guapswap => guapswap._1 == ERGTokenID)(0)
+        val tokenGuapSwaps = guapswaps.filter(guapswap => guapswap._1 != ERGTokenID)
+
+        val valid_GuapSwapTx: Boolean = {
+
+            val valid_GuapSwapProxyBoxes: Boolean = {
+
+                val valid_Contract: Boolean = {
+
+                }
+
+                val valid_CanAffordToPayFees: Boolean = {
+
+                }
+
+                allOf(Coll(
+                    valid_Contract,
+                    valid_CanAffordToPayFees
+                ))
+
+            }
+
+            val valid_BabelBoxes: Boolean = {
+
+            }
+
+            val valid_GuapSwaps: Boolean = {
+                
+                guapswaps.forall({ guapswap => 
+                
+                    val valid_PayoutPercentages: Boolean = {
+
+                        val valid_PayoutPercentageCanPayFee: Boolean = validPayoutPercentageCanPayDexFee(guapswap)
+
+                        val valid_PayoutPercentageInDexSwapBox: Boolean = validPayoutPercentageInDexSwapBox(guapswap)
+
+                        allOf(Coll(
+                            valid_PayoutPercentageCanPayFee,
+                            valid_PayoutPercentageInDexSwapBox
+                        ))
+
+                    }
+                    
+                    val valid_DexSwapBoxPropBytes: Boolean = validDexSwapBoxPropBytes(guapswap)
+                
+                })
+
+            }
+
+            val valid_MinerFundBox: Boolean = {
+
+            }
+
+            val valid_MinerBox: Boolean = {
+
+            }
+
+        }
+
+        sigmaProp(valid_GuapSwapTx) && UserPK
+
+    } else {
+        sigmaProp(false)
+    }
+
+    // ===== Helper Methods ===== //
+
+    def validPayoutPercentageCanPayDexFee(guapswap: (Coll[Byte], Coll[(((Coll[Byte], (Long, Long)), SigmaProp), ((Byte, Coll[Byte]), (Byte, Long)))])): Boolean = {
+        
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
         // ===== ERG Datums ===== //
         val ergDatumID: Int = 0
         val ergDatums: Coll((((SigmaProp, Coll[Byte]), (Long, Long)), ((Int, Long), Coll[Byte]))) = GuapSwapDatums.filter({(datum: (((SigmaProp, Coll[Byte]), (Long, Long)), ((Int, Long), Coll[Byte]))) => dexDatumFilter(datum, ergDatumID)})
         val ergPayoutPercentageFractions: Coll[(Long, Long)] = ergDatums.flatMap({(ergDatum: (((SigmaProp, Coll[Byte]), (Long, Long)), ((Int, Long), Coll[Byte]))) => ergDatum._1._2})
-
 
         // ===== Ergo Dex Datums ===== //
         val ergodexDatumID: Int = 1
@@ -126,27 +239,31 @@
         val ergoTreeTemplateBytesANDrecipientAddressesPair: Coll[(Coll[Byte], SigmaProp)] = DexSwapSellErgoTreeTemplateBytes.zip(recipientAddresses)
 
         // Fee variables for GuapSwap Tx
-        val protocolFee: Long = (ProtocolFeePercentageNum * totalPayout) / ProtocolFeePercentageDenom
+        val guapswapFee: Long = (GuapSwapFeePercentageNum * totalPayout) / GuapSwapFeePercentageDenom
         val serviceFee: Long = protocolFee + ProtocolMinerFee
         val totalDexFees: Long = IndividualTotalDexFees.fold(0L, {(acc: Long, individualTotalDexFee: Long) => acc + individualTotalDexFee})
         val totalFees: Long = serviceFee + totalDexFees
         val totalPayoutAfterServiceFee: Long = totalPayout - serviceFee
 
 
-        val validGuapSwapTx: Boolean = {
+        val valid_GuapSwapTx: Boolean = {
             
-            val validDexSwapSellProxyBoxes: Boolean = {
+            val valid_GuapSwapProxyBoxes: Boolean = {
 
                 // All inputs to the tx must have the DexSwapSellProxy contract
                 (INPUTS.forall({(input: Box) => input.propositionBytes == SELF.propositionBytes}))
                 
             }
 
-            val validDexSwapBoxes: Boolean = {
+            val valid_DexSwapBoxes: Boolean = {
 
             }
 
-            val validProtocolFeeBox: Boolean = {
+            val valid_MinerFundBox: Boolean = {
+
+            }
+
+            val valid_MinerBox: Boolean = {
 
             }
 
@@ -329,10 +446,7 @@
         }
 
     } else {
-
-        // Contract fails
         sigmaProp(false)
-
     }
 
     // ===== Helper Methods ===== //
