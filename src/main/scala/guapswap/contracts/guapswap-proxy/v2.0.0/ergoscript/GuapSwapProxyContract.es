@@ -1,5 +1,6 @@
 {
     // ===== Contract Info ===== //
+    // Name: GuapSwap Proxy Contract
     // Description: Proxy contract which holds the miner's payout from the mining pool, and will perform a swap-sell with the dex.
     // Version: 2.0.0
     // Author: Luca D’Angelo

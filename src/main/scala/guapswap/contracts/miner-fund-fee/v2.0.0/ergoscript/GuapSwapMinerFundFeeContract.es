@@ -1,7 +1,8 @@
 {
     // ===== Contract Info ===== //
+    // GuapSwap Miner Fund Fee Contract
     // Description: Proxy contract which holds the GuapSwap protocol fees.
-    // Version: 1.0
+    // Version: 2.0.0
     // Author: Luca D’Angelo
     
     // ===== Contract Hard-Coded Variables ===== //
