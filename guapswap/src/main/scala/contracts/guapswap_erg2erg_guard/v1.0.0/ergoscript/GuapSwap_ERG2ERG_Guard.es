@@ -18,8 +18,10 @@
     val GuapSwapMinerFundFeePercentageNum: Long = _GuapSwapMinerFundFeePercentageNum
     val GuapSwapMinerFundFeePecentageDenom Long = _GuapSwapMinerFundFeePercentageDenom
     val MinerFee: Long = _MinerFee
-    val IsMinerFeeBaseTokenSource: Boolean = _IsMinerFeeBaseTokenSource
+    val IsBaseTokenSourceForMinerFee: Boolean = _IsBaseTokenSourceForMinerFee // both of these need to be context extension variables
+    val GuapSwapProxyContractErgoTreeBytesHash: Coll[Byte] = blake2b256(_GuapSwapProxyContractErgoTreeBytes)
     
-    // ===== Spending Path Check ===== //
+    // ===== Context Extension Variables ===== //
+    val guapswapData: 
 
 }
