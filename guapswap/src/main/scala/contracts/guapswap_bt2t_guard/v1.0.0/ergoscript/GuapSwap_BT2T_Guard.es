@@ -36,7 +36,10 @@
     //            (
     //                (
     //                    (
-    //                        swapTokenId: Coll[Byte], 
+    //                        (
+    //                          swapTokenId: Coll[Byte],
+    //                          outputIndex: Int 
+    //                        ), 
     //                        (
     //                            percentageOfBaseTokenPayoutNum: Long, 
     //                            paercentageOfBaseTokenPayoutDenom: Long
@@ -70,6 +73,7 @@
     val AssignedTxTypeId: Byte = 0 // ERG-2-ERG
     val MaxAllowedGuapSwaps: Byte = _MaxAllowedGuapSwaps
 
+    Coll((start, stop), (start, stop), (start, stop))
     // ===== Context Extension Variables ===== //
     val NumberOfBabelBoxes: Byte = getVar[Byte](0).get
     val TxTypeId: Byte = getVar[Byte](1).get
@@ -77,19 +81,16 @@
     val GuapSwapMinerFee: Long = getVar[Long](3).get
     val GuapSwapMinerFundFeePercentageNum: Long = getVar[Long](4).get
     val GuapSwapMinerFundFeePecentageDenom Long = getVar[Long](5).get
-    val guapswapData: Coll[(Coll[Byte], Coll[(((Coll[Byte], (Long, Long)), (Coll[Byte], SigmaProp)), ((Byte, Byte), (Coll[Byte], Long)))])] = getVar[Coll[(Coll[Byte], Coll[(((Coll[Byte], (Long, Long)), (Coll[Byte], SigmaProp)), ((Byte, Byte), (Coll[Byte], Long)))])]](6).get
+    val guapswapDatum: ((Coll[Byte], (Int, Int)), Coll[(((Coll[Byte], (Long, Long)), (Coll[Byte], SigmaProp)), ((Byte, Byte), (Coll[Byte], Long)))])] = getVar[Coll[(Coll[Byte], Coll[(((Coll[Byte], (Long, Long)), (Coll[Byte], SigmaProp)), ((Byte, Byte), (Coll[Byte], Long)))])](6).get
 
     // ===== Relevant Variables ===== //
-    val 
-
-    val validERG2ERGuapSwap: Boolean = {
+    val validERGT2TokenGuapSwap: Boolean = {
 
         // ===== Inputs ===== //
         val guapswapProxyIN: Box = INPUTS(NumberOfBabelBoxes)
 
         // ===== Outputs ===== //
         val guapswapsOUT: Coll[Box] = OUTPUTS.slice(NumberOfBabelBoxes, OUTPUTS.size-2)
-        val erg2ergReceiversOUT: Coll[Box] = guapswapsOUT.slice(0, guapswapData.fold(0L, {(guapswapDatum) => guapswapDatum._2.size + acc}))
         val guapswapMinerFundBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
         val minerFeeBox: Box = OUTPUTS(OUTPUTS.size-1)
         val baseTokenGuapSwapBoxes: Coll[Coll[Box]] = guapswapData.fold(Coll[Coll[Box]](), {(guapswapDatum) => erg2ergReceiversOUT.slice(acc(acc.size).size, guapswapDatum._2.size)})
@@ -100,6 +101,25 @@
         val leftoverERGPayout: Long = if (IsBaseTokenSourceForGuapSwapMinerFee) totalERGPayout - guapswapMinerFundFeeAmount - GuapSwapMinerFee else totalERGPayout - guapswapMinerFundFeeAmount
 
         val validTxTypeId: Boolean = (TxTypeId == AssignedTxTypeId)
+
+        // for each erg2token swap, check conditions
+
+        val validErg2TokenReceivers: Boolean = {
+
+            val validErgTokenId: Boolean = {}
+
+            val validErg2TokenSwaps: Boolean = {
+
+                guapswapDatum._2.forall({ (erg2Tokenswap) =>
+                
+                    val outputIndex: Int = erg2TokenSwap._1._1._1._2
+                    val 
+
+                })
+
+            }
+
+        }
 
         val validErg2ErgReceivers: Boolean = {
 
