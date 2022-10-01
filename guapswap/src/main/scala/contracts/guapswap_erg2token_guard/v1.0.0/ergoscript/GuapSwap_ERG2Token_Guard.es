@@ -82,7 +82,7 @@
     val GuapSwapMinerFundFeePecentageDenom Long = getVar[Long](5).get
     val guapswapDatum = getVar[(Coll[Byte], Coll[((((Coll[Byte], Int), (Long, Long)), (Coll[Byte], SigmaProp)), ((Byte, Byte), (Coll[Byte], Long)))])](6).get
 
-    val validERGT2TokenGuapSwap: Boolean = {
+    val validERG2TokenGuapSwap: Boolean = {
 
         // ===== Relevant Inputs ===== //
         val guapswapProxyIN: Box = INPUTS(NumberOfBabelBoxes)
@@ -190,6 +190,6 @@
 
     }
 
-    sigmaProp(validERG2ERGuapSwap)
+    sigmaProp(validERG2TokenGuapSwap)
 
 }
