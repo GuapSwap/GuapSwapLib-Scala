@@ -158,6 +158,11 @@
 
             }
 
+            allOf(Coll(
+                validErgTokenId,
+                validErg2TokenSwaps
+            ))
+
         }
 
         val validGuapSwapMinerFundBox: Boolean = {
@@ -177,8 +182,9 @@
         allOf(Coll(
             validGuapSwapProxy,
             validTxTypeId,
-            validErg2ErgReceivers,
-            validGuapSwapMinerFundFee,
+            validPayout,
+            validErg2TokenReceivers,
+            validGuapSwapMinerFundBox,
             validGuapSwapMinerFee
         ))
 
