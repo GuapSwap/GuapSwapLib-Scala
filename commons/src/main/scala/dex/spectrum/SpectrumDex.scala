@@ -1,6 +1,7 @@
 package dex.spectrum
 
-import dex.{Dex, Ergo, Cardano}
+import blockchain.{Cardano, Ergo}
+import dex.Dex
 
 /**
  * Object representing Spectrum dex.

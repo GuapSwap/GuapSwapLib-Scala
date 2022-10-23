@@ -1,17 +1,20 @@
 package dex
 
+import blockchain.Blockchain
+
 /**
  * Class for an abstract Dex object.
+ *
  * @param dexName The dex name.
  * @param dexBlockchains The blockchains which the dex is built on.
  * @param dexAssets The assets of the dex on the different blockchains.
  * @param isMultiChain Flag to know if the blockchain is multichoin.
  */
 abstract class Dex(
-                    private val dexName: String,
-                    private val dexBlockchains: List[Blockchain],
-                    private val dexAssets: Map[Blockchain, DexBlockchainAssets],
-                    private val isMultiChain: Boolean
+                    protected val dexName: String,
+                    protected val dexBlockchains: List[Blockchain],
+                    protected val dexAssets: Map[Blockchain, DexBlockchainAssets],
+                    protected val isMultiChain: Boolean
                   ) {
 
   /**

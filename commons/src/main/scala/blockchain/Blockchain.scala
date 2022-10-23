@@ -1,4 +1,4 @@
-package dex
+package blockchain
 
 /**
  * Enum representing different possible blockchains.
