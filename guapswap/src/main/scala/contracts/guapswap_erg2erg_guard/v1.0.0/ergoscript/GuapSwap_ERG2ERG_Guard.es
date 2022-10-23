@@ -24,9 +24,10 @@
     // 0: Spectrum.Dex
 
     // ===== Dex Swap Type Ids ===== //
-    // 0: ERG-2-Token
-    // 1: Token-2-ERG
-    // 2: Token-2-Token
+    // 0: ERG-2-ERG
+    // 1: ERG-2-Token
+    // 2: Token-2-ERG
+    // 3: Token-2-Token (never actually used, this type of swap is simulated using Token-2-ERG and ERG-2-Token)
 
     // ===== GuapSwap Data ===== //
     // Coll[
@@ -46,8 +47,12 @@
     //                        receiverAddress: Coll[Byte], 
     //                        refundAddress: SigmaProp
     //                    )
-    //                ), 
-    //                (
+    //                ),     // Context Extension Variables: GuapSwapData
+    // Outputs: ERG2TokenDexSwapBoxes
+
+    // ===== Tx Swap Type Ids ===== //
+    // 0: ERG-2-ERG
+    // 1: ERG-2-Token
     //                    (
     //                        dexId: Byte, 
     //                        dexSwapTypeId

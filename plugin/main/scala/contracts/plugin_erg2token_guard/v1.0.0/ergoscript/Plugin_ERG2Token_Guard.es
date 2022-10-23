@@ -2,14 +2,14 @@
 
     // ===== Contract Information ===== //
     // Name: GuapSwap ERG-2-Token Guard
-    // Description: Contract that governs ERG-2-Token swaps from the GuapSwap proxy contract.
+    // Description: Contract that governs ERG-2-Token swap for the GuapSwap DApp plugin system.
     // Version: 1.0.0
     // Author: Luca D'Angelo
 
-    // ===== ERG-2-Token Tx ===== //
+    // ===== DApp Plugin ERG-2-Token Tx ===== //
     // Description: Part of the GuapSwap tx which only deals with ERG-2-ERG sends.
     // Data Inputs: None
-    // Inputs: GuapSwapProxy, ERG2TokenGuard
+    // Inputs: ERG2TokenGuard
     // Context Extension Variables: GuapSwapData
     // Outputs: ERG2TokenDexSwapBoxes
 
@@ -59,7 +59,7 @@
     //                    (
     //                        dexSwapBoxErgoTreeBytes: Coll[Byte], 
     //                        dexFee: Long
-    //                    )    val GuapSwapProxyContractErgoTreeBytesHash: Coll[Byte] = blake2b256(_GuapSwapProxyContractErgoTreeBytes)
+    //                    )
     //                )
     //            )
     //        ]
@@ -68,7 +68,6 @@
 
     // ===== Hard-Coded Constants ===== //
     val UserPK: SigmaProp = _UserPK
-    val GuapSwapProxyContractErgoTreeBytesHash: Coll[Byte] = blake2b256(_GuapSwapProxyContractErgoTreeBytes)
     val GuapSwapMinerFundErgoTreeBytesHash: Coll[Byte] = blake2b256(_GuapSwapMinerFundErgoTreeBytes)
     val ERGTokenId: Coll[Byte] = fromBase16("0000000000000000000000000000000000000000000000000000000000000000")
     val AssignedTxTypeId: Byte = 1 // ERG-2-Token
@@ -85,21 +84,16 @@
 
     val validERG2TokenGuapSwap: Boolean = {
 
-        // ===== Relevant Inputs ===== //
-        val guapswapProxyIN: Box = INPUTS(NumberOfBabelBoxes)
-
         // ===== Relevant Outputs ===== //
         val guapswapMinerFundBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
         val minerFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
 
         // ===== Relevant Variables ===== //
-        val totalERGPayout: Long = guapswapProxyIN.value
+        val totalERGPayout: Long = SELF.value
         val guapswapMinerFundFeeAmount: Long = totalERGPayout * GuapSwapMinerFundFeePercentageNum / GuapSwapMinerFundFeePercentageDenom
         val leftoverERGPayout: Long = if (IsBaseTokenSourceForGuapSwapMinerFee) totalERGPayout - guapswapMinerFundFeeAmount - GuapSwapMinerFee else totalERGPayout - guapswapMinerFundFeeAmount
         val totalDexFees: Long = guapswapDatum._2.fold(0L, { (erg2TokenSwap) => acc + erg2TokenSwap._2._2._2 })
         val totalPayoutAfterFees: Long = leftoverERGPayout - totalDexFees
-
-        val validGuapSwapProxy: Boolean = (blake2b256(guapswapProxyIN.propositionBytes) == GuapSwapProxyContractErgoTreeBytesHash)
 
         val validTxTypeId: Boolean = (TxTypeId == AssignedTxTypeId)
 
@@ -121,7 +115,7 @@
                     val baseTokenPayoutPercentageNum: Long = payoutPercentageTuple._1
                     val baseTokenPayoutPercentageDenom: Long = payoutPercentageTuple._2
                     val baseTokenPayoutPercentage: Long = (totalPayoutAfterFees * baseTokenPayoutPercentageNum) / baseTokenPayoutPercentageDenom
-                    val dexFee: Long = erg2TokenSwap._2._2._2
+                    val dexFee: Long = erg2TokenSwap._2._2._  2
 
                     val receiverAddress: Coll[Byte] = erg2TokenSwap._1._2._1
                     val refundAddress: SigmaProp = erg2TokenSwap._1._2._1
@@ -181,7 +175,6 @@
         val validGuapSwapMinerFee: Boolean = (minerFeeBoxOUT.value == GuapSwapMinerFee)
 
         allOf(Coll(
-            validGuapSwapProxy,
             validTxTypeId,
             validPayout,
             validErg2TokenReceivers,
