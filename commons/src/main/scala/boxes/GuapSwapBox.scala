@@ -29,21 +29,21 @@ trait GuapSwapBox {
   def inputBox(withTxId: String, withIndex: Short): InputBox = this.outBox.convertToInputWith(withTxId, withIndex)
 
   def value = _value
-  def value_= (newValue: Long) = _value = newValue
+  def value_=(newValue: Long): Unit = _value = newValue
 
   def contract = _contract
-  def contract_= (newContract: ErgoContract) = _contract = newContract
+  def contract_=(newContract: ErgoContract): Unit = _contract = newContract
 
   def tokens = _tokens
-  def tokens_= (newTokens: List[ErgoToken]) = _tokens = newTokens
+  def tokens_=(newTokens: List[ErgoToken]): Unit = _tokens = newTokens
 
   def registers = _registers
-  def registers_= (newRegisters: List[ErgoValue[_]]) = _registers = registers
+  def registers_=(newRegisters: List[ErgoValue[_]]): Unit = _registers = registers
 
   def contextVars = _contextVars
-  def contextVars_= (newContextVars: List[ContextVar]) = _contextVars = newContextVars
+  def contextVars_=(newContextVars: List[ContextVar]): Unit = _contextVars = newContextVars
 
   def ctx = _ctx
-  def ctx_= (newCtx: BlockchainContextImpl) = _ctx = newCtx
+  def ctx_=(newCtx: BlockchainContextImpl): Unit = _ctx = newCtx
 
 }
