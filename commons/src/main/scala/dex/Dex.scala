@@ -7,9 +7,9 @@ import blockchain.Blockchain
  */
 trait Dex {
 
-  var _dexName: String
-  var _dexBlockchains: List[Blockchain]
-  var _dexAssets: Map[Blockchain, DexBlockchainAssets]
-  var _isMultiChain: Boolean
+  protected var _dexName: String
+  protected var _dexBlockchains: List[Blockchain]
+  protected var _dexAssets: Map[Blockchain, DexBlockchainAssets]
+  protected var _isMultiChain: Boolean
 
 }
