@@ -9,8 +9,10 @@ import dex.{Dex, DexBlockchainAssets}
  * Object representing Spectrum dex.
  */
 case object SpectrumDex extends Dex {
-  override protected var _dexName: String = "Spectrum Dex"
-  override protected val _dexBlockchains: List[Blockchain] = List(Ergo, Cardano)
-  override protected val _dexAssets: Map[Blockchain, DexBlockchainAssets] = Map((Ergo, ErgoBlockchainAssets), (Cardano, CardanoBlockchainAssets))
-  override protected val _isMultiChain: Boolean = true
+
+  _dexName = "Spectrum Dex"
+  _dexBlockchains = List(Ergo, Cardano)
+  _dexAssets = Map((Ergo, SpectrumErgoAssets), (Cardano, SpectrumCardanoAssets))
+  _isMultiChain = true
+
 }
