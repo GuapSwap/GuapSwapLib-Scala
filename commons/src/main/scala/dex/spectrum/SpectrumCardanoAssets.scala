@@ -1,15 +1,15 @@
 package dex.spectrum
 
 import dex.DexBlockchainAssets
-
-import blockchain.Cardano
+import blockchain.{Blockchain, BlockchainAsset, Cardano}
 import blockchain.cardano._
 
 /**
  * Object representing the Cardano assets available on Spectrum dex.
  */
-case object SpectrumCardanoAssets extends DexBlockchainAssets(Cardano) {
-  protected val dexBlockchainAssets: List[CardanoBlockchainAsset] = List(
+case object SpectrumCardanoAssets extends DexBlockchainAssets {
+  override protected val _blockchain: Blockchain = Cardano
+  override protected val _dexBlockchainAssets: List[CardanoBlockchainAsset] = List(
     CardanoBlockchainAssets.ADA
   )
 }

@@ -3,26 +3,23 @@ package dex
 import blockchain.{Blockchain, BlockchainAsset}
 
 /**
- * Class representing abstract dex blockchain assets.
- *
- * @param blockchain The blockchain where the assets exists.
+ * Trait representing abstract dex blockchain assets.
  */
-abstract class DexBlockchainAssets(
-                                    protected val blockchain: Blockchain
-                                  ) {
+trait DexBlockchainAssets {
 
-  protected val dexBlockchainAssets: List[BlockchainAsset]
+  protected val _blockchain: Blockchain
+  protected val _dexBlockchainAssets: List[BlockchainAsset]
 
   /**
    * Get the blockchain which the tokens exist on.
    * @return
    */
-  def getBlockchain: Blockchain = this.blockchain
+  def blockchain: Blockchain = _blockchain
 
   /**
    * Get the dex blockchain assets.
    * @return
    */
-  def getDexBlockchainAssets: List[BlockchainAsset] = this.dexBlockchainAssets
+  def dexBlockchainAssets: List[BlockchainAsset] = _dexBlockchainAssets
 
 }

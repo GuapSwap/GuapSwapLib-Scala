@@ -9,7 +9,7 @@ import blockchain.{BlockchainAsset, Cardano}
  * @param decimals    The amount of decimals required for the token.
  */
 case class CardanoBlockchainAsset(
-                                private val assetTicker: String,
-                                private val assetId: String,
-                                private val decimals: Int,
-                              ) extends BlockchainAsset(assetTicker = assetTicker, assetId = assetId, decimals = decimals, blockchain = Cardano)
+                                private val _assetTicker: String,
+                                private val _assetId: String,
+                                private val _decimals: Int,
+                              ) extends BlockchainAsset(_assetTicker = _assetTicker, _assetId = _assetId, _decimals = _decimals, _blockchain = Cardano)
