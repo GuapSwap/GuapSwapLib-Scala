@@ -8,8 +8,8 @@ import blockchain.cardano._
  * Object representing the Cardano assets available on Spectrum dex.
  */
 case object SpectrumCardanoAssets extends DexBlockchainAssets {
-  override protected val _blockchain: Blockchain = Cardano
-  override protected val _dexBlockchainAssets: List[CardanoBlockchainAsset] = List(
+  _blockchain = Cardano
+  _dexBlockchainAssets = List(
     CardanoBlockchainAssets.ADA
   )
 }
