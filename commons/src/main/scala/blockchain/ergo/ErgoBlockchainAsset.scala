@@ -9,7 +9,14 @@ import blockchain.{BlockchainAsset, Ergo}
  * @param _decimals    The amount of decimals required for the token.
  */
 case class ErgoBlockchainAsset(
-                                private val _assetTicker: String,
-                                private val _assetId: String,
-                                private val _decimals: Int,
-                              ) extends BlockchainAsset(_assetTicker = _assetTicker, _assetId = _assetId, _decimals = _decimals, _blockchain = Ergo)
+  private val assetTicker: String,
+  private val assetId: String,
+  private val decimals: Int,
+) extends BlockchainAsset {
+
+  _assetTicker = assetTicker
+  _assetId = assetId
+  _decimals = decimals
+  _blockchain = Ergo
+
+}
