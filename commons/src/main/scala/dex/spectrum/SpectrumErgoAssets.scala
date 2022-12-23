@@ -8,7 +8,7 @@ import blockchain.ergo._
  * Object representing the Ergo assets available on Spectrum dex.
  */
 case object SpectrumErgoAssets extends DexBlockchainAssets {
-  _blockchain = Ergo
+  _dexBlockchain = Ergo
   _dexBlockchainAssets = List(
     ErgoBlockchainAssets.ERG,
     ErgoBlockchainAssets.SigUSD,

@@ -8,7 +8,7 @@ import blockchain.cardano._
  * Object representing the Cardano assets available on Spectrum dex.
  */
 case object SpectrumCardanoAssets extends DexBlockchainAssets {
-  _blockchain = Cardano
+  _dexBlockchain = Cardano
   _dexBlockchainAssets = List(
     CardanoBlockchainAssets.ADA
   )

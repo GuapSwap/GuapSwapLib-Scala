@@ -3,12 +3,7 @@ package dex.spectrum.contracts
 import contracts.GuapSwapContract
 import org.ergoplatform.appkit.NetworkType
 
-abstract case class SpectrumSwapContract(
-                                 override val version: String,
-                                 override val ergoscript: String,
-                                 override val constants: Map[String, Object],
-                                 override val networkType: NetworkType
-                               ) extends GuapSwapContract(version, ergoscript, constants, networkType) {
+abstract class SpectrumSwapContract extends GuapSwapContract {
 
   /**
    * Calculate min output amount of ErgoDex LP
@@ -45,7 +40,7 @@ abstract case class SpectrumSwapContract(
    * @param minOutputAmount
    * @return Tuple containing the swam extremums.
    */
-  def swapExtremums(minExecutionFee: Long, nitro: Double, minOutputAmount: Long): (Double, (Long, Long, Long, Long)) = {
+  def calculateSwapExtremums(minExecutionFee: Long, nitro: Double, minOutputAmount: Long): (Double, (Long, Long, Long, Long)) = {
 
     val exFeePerToken: Double = minExecutionFee.toDouble / minOutputAmount.toDouble
     val adjustedMinExecutionFee: Double = Math.floor(exFeePerToken * minOutputAmount)

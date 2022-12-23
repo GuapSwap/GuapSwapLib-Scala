@@ -12,9 +12,17 @@ import org.ergoplatform.appkit.impl.BlockchainContextImpl
  * @param ctx
  */
 case class SpectrumERG2TokenSwapBox(
-                                     override val value: Long,
-                                     override val contract: ErgoContract,
-                                     override val tokens: List[ErgoToken],
-                                     override implicit val ctx: BlockchainContextImpl
-                                   ) extends GuapSwapBox(value, contract, tokens, registers = null, contextVars = null, ctx) {
+  private val _value: Long,
+  private val _contract: ErgoContract,
+  private val _tokens: List[ErgoToken],
+  private val _ctx: BlockchainContextImpl
+) extends SpectrumSwapBox {
+
+  _value = _value
+  _contract = _contract
+  _tokens = _tokens
+  _ctx = _ctx
+
+  // TODO: implement these things using the transaction config
+
 }
