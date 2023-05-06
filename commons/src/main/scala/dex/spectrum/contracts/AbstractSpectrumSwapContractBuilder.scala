@@ -1,9 +1,8 @@
 package dex.spectrum.contracts
 
-import contracts.GuapSwapContract
-import org.ergoplatform.appkit.NetworkType
+import contracts.{GuapSwapContract, GuapSwapContractBuilder}
 
-abstract class SpectrumSwapContract extends GuapSwapContract {
+abstract class AbstractSpectrumSwapContractBuilder extends GuapSwapContractBuilder {
 
   /**
    * Calculate min output amount of ErgoDex LP

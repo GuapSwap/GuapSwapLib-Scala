@@ -1,6 +1,6 @@
 package blockchain.cardano
 
-import blockchain.{BlockchainAsset, Cardano}
+import blockchain.{Blockchain, BlockchainAsset, Cardano}
 
 /**
  * Object representing an asset existing on the Cardano blockchain.
@@ -14,8 +14,8 @@ case class CardanoBlockchainAsset(
   private val decimals: Int,
 ) extends BlockchainAsset {
 
-  _assetTicker = assetTicker
-  _assetId = assetId
-  _decimals = decimals
-  _blockchain = Cardano
+  override val _assetTicker: String = assetTicker
+  override val _assetId: String = assetId
+  override val _decimals: Int = decimals
+  override val _blockchain: Blockchain = Cardano
 }

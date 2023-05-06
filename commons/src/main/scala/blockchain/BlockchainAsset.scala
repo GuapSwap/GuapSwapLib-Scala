@@ -5,9 +5,9 @@ package blockchain
   */
 trait BlockchainAsset {
 
-  var _assetTicker: String
-  var _assetId: String
-  var _decimals: Int
-  var _blockchain: Blockchain
+  val _assetTicker: String
+  val _assetId: String
+  val _decimals: Int
+  val _blockchain: Blockchain
 
 }

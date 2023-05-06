@@ -1,28 +1,28 @@
 package dex.spectrum.boxes
 
 import boxes.GuapSwapBox
-import org.ergoplatform.appkit.{ErgoContract, ErgoToken}
+import org.ergoplatform.appkit.{BoxAttachment, ErgoContract, ErgoToken, ErgoValue, InputBox, OutBox, UnsignedTransactionBuilder}
 import org.ergoplatform.appkit.impl.BlockchainContextImpl
+import sigmastate.Values
+
+import java.util
 
 /**
  * Class representing a Spectrum ERG2Token swap box.
- * @param value
- * @param contract
- * @param tokens
- * @param ctx
  */
-case class SpectrumERG2TokenSwapBox(
-  private val _value: Long,
-  private val _contract: ErgoContract,
-  private val _tokens: List[ErgoToken],
-  private val _ctx: BlockchainContextImpl
-) extends SpectrumSwapBox {
+case class SpectrumERG2TokenSwapBox(outbox: OutBox) extends AbstractSpectrumSwapBox {
 
-  _value = _value
-  _contract = _contract
-  _tokens = _tokens
-  _ctx = _ctx
 
-  // TODO: implement these things using the transaction config
+  override def getValue: Long = outbox.getValue
+
+  override def getCreationHeight: Int = outbox.getCreationHeight
+
+  override def getTokens: util.List[ErgoToken] = outbox.getTokens
+
+  override def getRegisters: util.List[ErgoValue[_]] = outbox.getRegisters
+
+  override def getErgoTree: Values.ErgoTree = outbox.getErgoTree
+
+  override def getAttachment: BoxAttachment = outbox.getAttachment
 
 }
