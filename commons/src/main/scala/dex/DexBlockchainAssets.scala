@@ -7,7 +7,6 @@ import blockchain.{Blockchain, BlockchainAsset}
  */
 trait DexBlockchainAssets {
 
-  protected var _dexBlockchain: Blockchain
-  protected var _dexBlockchainAssets: List[BlockchainAsset]
+  val _dexBlockchain: Blockchain
 
 }

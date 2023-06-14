@@ -25,7 +25,8 @@ inThisBuild(List(
     Ergo ++
     Testing ++
     Edge ++
-    Gson
+    Gson ++
+    SigmaBuilders
   ,
 
   sonatypeCredentialHost := "s01.oss.sonatype.org",
@@ -38,7 +39,7 @@ inThisBuild(List(
     "Sonatype Snapshots".at(
       "https://s01.oss.sonatype.org/content/repositories/snapshots"
     )
-  ) ++ Resolver.sonatypeOssRepos("public") ++ Resolver.sonatypeOssRepos("snapshots"),
+  ),
 
   versionScheme := Some("semver-spec"),
   assembly / assemblyJarName := s"${name.value}-${version.value}.jar",
@@ -53,8 +54,9 @@ lazy val projectSettings = List(
     Ergo ++
     Testing ++
     Edge ++
-    Gson
-  ,
+    Gson ++
+    SigmaBuilders,
+
   resolvers ++= Seq(
     "Sonatype Releases".at(
       "https://s01.oss.sonatype.org/content/repositories/releases"
@@ -62,7 +64,7 @@ lazy val projectSettings = List(
     "Sonatype Snapshots".at(
       "https://s01.oss.sonatype.org/content/repositories/snapshots"
     )
-  ) ++ Resolver.sonatypeOssRepos("public") ++ Resolver.sonatypeOssRepos("snapshots")
+  )
 )
 
 lazy val commons = utils

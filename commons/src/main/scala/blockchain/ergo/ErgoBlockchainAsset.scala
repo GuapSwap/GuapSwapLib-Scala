@@ -1,6 +1,6 @@
 package blockchain.ergo
 
-import blockchain.{BlockchainAsset, Ergo}
+import blockchain.{Blockchain, BlockchainAsset, Ergo}
 
 /**
  * Object representing an asset existing on the Ergo blockchain.
@@ -9,14 +9,14 @@ import blockchain.{BlockchainAsset, Ergo}
  * @param _decimals    The amount of decimals required for the token.
  */
 case class ErgoBlockchainAsset(
-  private val assetTicker: String,
-  private val assetId: String,
-  private val decimals: Int,
-) extends BlockchainAsset {
+                                assetTicker: String,
+                                assetId: String,
+                                decimals: Int
+                              ) extends BlockchainAsset {
 
-  _assetTicker = assetTicker
-  _assetId = assetId
-  _decimals = decimals
-  _blockchain = Ergo
+  override val _assetTicker: String = assetTicker
+  override val _assetId: String = assetId
+  override val _decimals: Int = decimals
+  override val _blockchain: Blockchain = Ergo
 
 }
