@@ -1,8 +1,9 @@
-package dex.spectrum.contracts
+package dex.spectrum.spectrum_builders.contract_builders
 
-import contracts.{GuapSwapContract, GuapSwapContractBuilder}
+import builders.contract_builders.ContractBuilder
+import common_builders.contract_builders.AbstractGuapSwapContractBuilder
 
-abstract class AbstractSpectrumSwapContractBuilder extends GuapSwapContractBuilder {
+abstract class AbstractSpectrumSwapContractBuilder extends AbstractGuapSwapContractBuilder {
 
   /**
    * Calculate min output amount of ErgoDex LP

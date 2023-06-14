@@ -5,7 +5,7 @@ object dependencies {
 
   val Ergo: List[ModuleID] = List(
     "org.scorexfoundation" %% "scrypto" % "2.1.10",
-    "org.ergoplatform" %% "ergo-appkit" % "4.0.11",
+    "org.ergoplatform" %% "ergo-appkit" % "5.0.2",
     "org.scorexfoundation" %% "sigma-state" % "4.0.3"
   )
 
@@ -20,6 +20,10 @@ object dependencies {
 
   val Gson: List[ModuleID] = List(
     "com.google.code.gson" % "gson" % "2.8.5"
+  )
+
+  val SigmaBuilders: List[ModuleID] = List(
+    "org.guapswap" %% "sigma-builders" % "0.1.1"
   )
 
 }
