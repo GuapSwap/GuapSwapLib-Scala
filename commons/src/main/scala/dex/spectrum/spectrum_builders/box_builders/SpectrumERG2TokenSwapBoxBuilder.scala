@@ -1,13 +1,23 @@
 package dex.spectrum.spectrum_builders.box_builders
 
-import common_builders.box_builders.AbstractGuapSwapBoxBuiler
+import builders.box_builders.BoxBuilder
 import org.ergoplatform.appkit._
 
-case class SpectrumERG2TokenSwapBoxBuilder() extends AbstractGuapSwapBoxBuiler {
+case class SpectrumERG2TokenSwapBoxBuilder(
+                                          swapBoxValue: Long,
+                                          spectrumERG2TokenSwapBuyContract: ErgoContract
+                                          ) extends BoxBuilder {
 
-  override val value: Long = _
-  override val contract: ErgoContract = _
+  override val value: Long = swapBoxValue
+  override val contract: ErgoContract = spectrumERG2TokenSwapBuyContract
 
-  override def toOutBox(implicit outBoxBuilder: OutBoxBuilder): OutBox = ???
+  override def toOutBox(implicit outBoxBuilder: OutBoxBuilder): OutBox = {
+
+    outBoxBuilder
+      .value(value)
+      .contract(contract)
+      .build()
+
+  }
 
 }
