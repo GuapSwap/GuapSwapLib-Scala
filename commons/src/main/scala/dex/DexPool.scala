@@ -1,13 +1,16 @@
 package dex
 
-import blockchain.{Blockchain, BlockchainAsset}
+import ergo.ErgoBlockchainAsset
+import org.ergoplatform.appkit.ErgoId
 
 trait DexPool {
 
-    val _dex: Dex
-    val _dexBlockchain: Blockchain
     val _dexPoolId: String
-    var _dexPoolAssetX: BlockchainAsset
-    var _dexPoolAssetY: BlockchainAsset
+    var _dexPoolAssetX: ErgoBlockchainAsset
+    var _dexPoolAssetY: ErgoBlockchainAsset
+
+    def getPoolIdAsErgoId: ErgoId = {
+        ErgoId.create(_dexPoolId)
+    }
 
 }

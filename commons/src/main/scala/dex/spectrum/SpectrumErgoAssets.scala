@@ -1,15 +1,12 @@
-package dex.spectrum.blockchains.ergo
+package dex.spectrum
 
-import dex.DexBlockchainAssets
-import blockchain.{Blockchain, BlockchainAsset, Ergo}
-import blockchain.ergo._
+import ergo.ErgoBlockchainAssets
+import dex.DexAssets
 
 /**
  * Object representing the Ergo assets available on Spectrum dex.
  */
-case object SpectrumErgoAssets extends DexBlockchainAssets {
-
-  override val _dexBlockchain: Blockchain = Ergo
+object SpectrumErgoAssets extends DexAssets {
 
   final val ERG = ErgoBlockchainAssets.ERG
   final val SigUSD = ErgoBlockchainAssets.SigUSD
@@ -23,5 +20,6 @@ case object SpectrumErgoAssets extends DexBlockchainAssets {
   final val Flux = ErgoBlockchainAssets.Flux
   final val Terahertz = ErgoBlockchainAssets.Terahertz
   final val COMET = ErgoBlockchainAssets.COMET
+  final val SPF = ErgoBlockchainAssets.SPF
 
 }
