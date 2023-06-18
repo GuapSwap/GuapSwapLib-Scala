@@ -1,6 +1,6 @@
-package blockchain.ergo
+package ergo
 
-import blockchain.{Blockchain, BlockchainAsset, Ergo}
+import org.ergoplatform.appkit.ErgoId
 
 /**
  * Object representing an asset existing on the Ergo blockchain.
@@ -12,11 +12,13 @@ case class ErgoBlockchainAsset(
                                 assetTicker: String,
                                 assetId: String,
                                 decimals: Int
-                              ) extends BlockchainAsset {
+                              ) {
 
-  override val _assetTicker: String = assetTicker
-  override val _assetId: String = assetId
-  override val _decimals: Int = decimals
-  override val _blockchain: Blockchain = Ergo
+  val _assetTicker: String = assetTicker
+  val _assetId: String = assetId
+  val _decimals: Int = decimals
 
+  def getAssetIdAsErgoId: ErgoId = {
+    ErgoId.create(_assetId)
+  }
 }
