@@ -70,3 +70,23 @@ lazy val projectSettings = List(
 lazy val commons = utils
   .mkModule("commons", "commons package for guapswaplib-scala")
   .settings(projectSettings)
+
+lazy val guapswap = utils
+  .mkModule("guapswap", "guapswap package for guapswaplib-scala")
+  .settings(projectSettings)
+
+//lazy val oasis = utils
+//  .mkModule("oasis", "guapswap-oasis package for guapswaplib-scala")
+//  .settings(projectSettings)
+//
+//lazy val pay = utils
+//  .mkModule("pay", "guapswap-pay package for guapswaplib-scala")
+//  .settings(projectSettings)
+//
+//lazy val plugin = utils
+//  .mkModule("plugin", "guapswap-dapp-plugin package for guapswaplib-scala")
+//  .settings(projectSettings)
+//
+//lazy val payday = utils
+//  .mkModule("payday", "guapswap-payday package for guapswaplib-scala")
+//  .settings(projectSettings)
