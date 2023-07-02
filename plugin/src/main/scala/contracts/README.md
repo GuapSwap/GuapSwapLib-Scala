@@ -10,4 +10,4 @@ Each contract folder consists of folders for each version and the associated doc
 
 The GuapSwap protocol consists of the following ErgoScript contracts:
    
-1. [DApp Plugin ERG-2-Token Guard](./plugin_erg2token_guard/README.md)
+1. [DApp Plugin ERG-2-Token Guard](plugin_erg2token_guard/README.md)

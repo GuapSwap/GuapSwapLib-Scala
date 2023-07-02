@@ -50,7 +50,7 @@ inThisBuild(List(
 lazy val projectSettings = List(
   scalaVersion := "2.12.15",
   organization := "org.guapswap",
-  libraryDependencies ++=
+    libraryDependencies ++=
     Ergo ++
     Testing ++
     Edge ++
@@ -69,11 +69,11 @@ lazy val projectSettings = List(
 
 lazy val commons = utils
   .mkModule("commons", "commons package for guapswaplib-scala")
-  .settings(projectSettings)
+  .settings(projectSettings ++ List(idePackagePrefix := Some("org.guapswap.guapswaplib-scala.commons")))
 
 lazy val guapswap = utils
   .mkModule("guapswap", "guapswap package for guapswaplib-scala")
-  .settings(projectSettings)
+  .settings(projectSettings ++ List(idePackagePrefix := Some("org.guapswap.guapswaplib-scala.guapswap")))
 
 //lazy val oasis = utils
 //  .mkModule("oasis", "guapswap-oasis package for guapswaplib-scala")

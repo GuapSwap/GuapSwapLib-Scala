@@ -20,7 +20,7 @@ object SpectrumDex extends Dex {
   final val SPECTRUM_ERGO_POOL_FEE_DENOM: Long = 1000L // Pool fee denominator, determined from pool contract
 
   // Scripts
-  final val SPECTRUM_ERGO_N2T_SWAPSELL_SCRIPT: String = Files.readString(Paths.get("src/main/scala/dex/spectrum/contracts/amm/v3/n2t/SwapSell.es")).stripMargin
+  final val SPECTRUM_ERGO_N2T_SWAPSELL_SCRIPT: String = Files.readString(Paths.get("src/main/scala/dex/spectrum/contracts/amm/n2t/swapsell/v3/ergoscript/spectrum_v3_amm_n2t_swapsell.es")).stripMargin
 
   override def getPoolFromAssetTicker(assetTicker: String): DexPool = {
 
