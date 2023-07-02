@@ -1,13 +1,13 @@
-# GuapDrop Service: Guard - v1.0.0
+# GuapDrop: Service Contract - v1.0.0
 
 ## Contract
 
-[ErgoScript](ergoscript/guapdrop_v1_guard.es)
+[ErgoScript](ergoscript/guapdrop_v1_service.es)
 
 ## Documentation
 
 ### Description
-This contract represents the guard box for the GuapDrop protocol, which is used to ensure that all recipients are correct and receive the appropriate amount of ERG.
+This is the service contract guarding the box for the GuapDrop protocol, which is used to ensure that all recipients are correct and receive the appropriate amount of ERG.
 
 ### Box Contents
 Tokens
@@ -18,7 +18,7 @@ Registers
 
 ### Relevant Transactions
 1. GuapDrop Tx
-- Inputs: GuapDropGuard
+- Inputs: GuapDropService
 - DataInputs: None
 - Outputs: Receiver1, ... , ReceiverM, GuapDropFee, MinerFee
 - Context Variables: None

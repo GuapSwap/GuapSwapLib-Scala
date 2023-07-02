@@ -2,10 +2,15 @@
 
 All contracts for the GuapSwap protocol are documented below based on the service.
 
-## Services
+## Proxy
 [GuapSwap Proxy Contract](./guapswap_proxy/README.md)
 
-### GuapSwap
-[GuapSwap ERG-2-Token Guard](guapswap_contracts/guapswap_erg2token_guard/README.md)
+## Services
+
+### [GuapSwap](guapswap_contracts/README.md)
 
 ### [GuapDrop](guapdrop_contracts/README.md)
+
+### OASIS
+
+### FIMO

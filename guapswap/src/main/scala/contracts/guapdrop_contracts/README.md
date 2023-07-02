@@ -1,6 +1,6 @@
-# GuapDrop Service: ErgoScript Contracts Documentation
+# GuapDrop: ErgoScript Contracts Documentation
 
-All contracts for the GuapDrop service.
+All contracts for the service.
 
 ## Contracts
-[GuapDrop Guard](guapdrop_guard/README.md)
+[GuapDrop Service Contract](service/README.md)

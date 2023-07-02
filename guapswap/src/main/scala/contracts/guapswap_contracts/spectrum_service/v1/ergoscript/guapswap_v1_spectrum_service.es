@@ -1,10 +1,11 @@
 {
 
     // ===== Contract Information ===== //
-    // Name: GuapSwap ERG-2-Token Guard
-    // Description: Contract that governs ERG-2-Token swaps from the GuapSwap proxy contract.
+    // Name: GuapSwap Spectrum Service Contract
+    // Description: This is the service contract guarding the box for the GuapSwap protocol,
+    //              which is used to ensure that all Spectrum dex boxes are created properly.
     // Version: 1.0.0
-    // Author: Luca D'Angelo
+    // Author: Luca D'Angelo (luca.dangelo@guapswap.org)
 
     // ===== ERG-2-Token Tx ===== //
     // Description: Part of the GuapSwap tx which only deals with ERG-2-ERG sends.

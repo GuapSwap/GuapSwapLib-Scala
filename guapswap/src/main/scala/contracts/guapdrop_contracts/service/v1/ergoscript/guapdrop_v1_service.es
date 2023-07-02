@@ -1,8 +1,8 @@
 {
 
     // ===== Contract Information ===== //
-    // Name: GuapDrop Guard
-    // Description: This contract represents the guard box for the GuapDrop protocol, 
+    // Name: GuapDrop Service
+    // Description: This is the service contract guarding the box for the GuapDrop protocol,
     //              which is used to ensure that all recipients are correct and receive the appropriate amount of ERG.
     // Version: 1.0.0
     // Author: Luca D'Angelo (luca.dangelo@guapswap.org)
@@ -15,7 +15,7 @@
 
     // ===== Relevant Transactions ===== //
     // 1. GuapDrop Tx
-    // Inputs: GameDropGuard
+    // Inputs: GameDropService
     // DataInputs: None
     // Outputs: Receiver1, ... , ReceiverM, GuapDropFee, MinerFee
     // Context Variables: None
