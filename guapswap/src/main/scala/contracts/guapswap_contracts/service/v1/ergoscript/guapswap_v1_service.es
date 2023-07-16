@@ -17,7 +17,7 @@
     // Inputs: GuapSwapSpectrumDexService
     // Data Inputs: None
     // Outputs: SpectrumERG2TokenSwapBox1, ... , SpectrumERG2TokenSwapBoxM, MinerFee
-    // Context Variables: SpectrumData
+    // Context Variables: None
 
     // ===== Compile Time Constants ($) ===== //
     // $userPK: SigmaProp
@@ -74,62 +74,15 @@
     val spectrumConstantsPositions_Boolean: Coll[Int]   = Coll(10)
     val spectrumConstantsPositions_ByteColl: Coll[Int]  = Coll(13, 14, 15, 23, 28)
 
-    // ===== GuapSwap Spectrum Dex Service Tx ===== //
-    val validGuapSwapSpectrumDexServiceTx: Boolean = {
+    // ===== GuapSwap Service Tx ===== //
+    val validGuapSwapServiceTx: Boolean = {
 
         // Outputs
         val minerFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
 
-        val validSpectrumDexSwapBoxes: Boolean = {
+        val validDexServiceBoxes: Boolean = {
 
-            @spectrumData.indices.forall({ (i: Int) =>
 
-                val spectrumDexSwapBox: Box = OUTPUTS(i)
-                
-                val spectrumDatum: (Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]]))))) = @spectrumData(i)
-                
-                val percentageOfServiceAllocationNum: Long = spectrumDatum._1(0)
-                val percentageOfServiceAllocationDenom: Long = specturmDatum._1(1)
-                val spectrumSwapParams: (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))) = spectrumData._2
-
-                val validSpectrumDexSwapBox: Boolean = {
-                    
-                    val validAllocation: Boolean = {
-
-                        val allocationAmount: Long = (serviceAllocation * percentageOfServiceAllocationNum) / percentageOfServiceAllocationDenom
-                        
-                        (spectrumDexSwapBox.value == allocationAmount)
-
-                    }
-
-                    val validSwapContract: Boolean = {
-
-                        val userParams_Long: Coll[Long]             = spectrumSwapParams._1
-                        val userParams_Int: Coll[Int]               = spectrumSwapParams._2._1 
-                        val userParams_ProveDlog: Coll[ProveDlog]   = spectrumSwapParams._2._2._1 
-                        val userParams_Boolean: Coll[Boolean]       = spectrumSwapParams._2._2._2._1 
-                        val userParams_ByteColl: Coll[Coll[Byte]]   = spectrumSwapParams._2._2._2._2
-
-                        val longBytes: Coll[Byte]       = substConstants(spectrumDexERG2TokenProxyContractBytes, spectrumConstantsPositions_Long, userParams_Long)
-                        val intBytes: Coll[Byte]        = substConstants(longBytes, spectrumConstantsPositions_Int, userParams_Int)
-                        val proveDlogBytes: Coll[Byte]  = substConstants(intBytes, spectrumConstantsPositions_ProveDlog, userParams_ProveDlog)
-                        val booleanBytes: Coll[Byte]    = substConstants(proveDlogBytes, spectrumConstantsPositions_Boolean, userParams_Boolean)
-                        val byteCollBytes: Coll[Byte]   = substConstants(booleanBytes, spectrumConstantsPositions_ByteColl, userParams_ByteColl)
-
-                        (spectrumDexSwapBox.propositionBytes == byteCollBytes)
-
-                    }
-
-                    allOf(Coll(
-                        validAllocation,
-                        validSwapContract
-                    )) 
-
-                }
-
-                validSpectrumDexSwapBox
-
-            })
 
         }
 
@@ -143,12 +96,12 @@
         }
 
         allOf(Coll(
-            validSpectrumDexSwapBoxes,
+            validDexServiceBoxes,
             validMinerFee
         ))
 
     }
 
-    (sigmaProp(validGuapSwapSpectrumDexServiceTx) && $userPK) || $userPK
+    (sigmaProp(validGuapSwapServiceTx) && $userPK) || $userPK
 
 }
