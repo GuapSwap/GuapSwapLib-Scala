@@ -10,14 +10,14 @@
     // Tokens
     // None
     // Registers
-    // R4: Long         MinerFee
+    // R4: Long MinerFee
 
     // ===== Relevant Transactions ===== //
     // 1. GuapSwap Spectrum Dex Service Tx
     // Inputs: GuapSwapSpectrumDexService
     // Data Inputs: None
     // Outputs: SpectrumERG2TokenSwapBox1, ... , SpectrumERG2TokenSwapBoxM, MinerFee
-    // Context Variables: None
+    // Context Variables: SpectrumData
 
     // ===== Compile Time Constants ($) ===== //
     // $userPK: SigmaProp
