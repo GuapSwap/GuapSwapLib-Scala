@@ -10,79 +10,100 @@
     // Tokens
     // None
     // Registers
-    // R4: Long         MinerFee
+    // R4: Long MinerFee
 
     // ===== Relevant Transactions ===== //
-    // 1. GuapSwap Spectrum Dex Service Tx
-    // Inputs: GuapSwapSpectrumDexService
+    // 1. GuapSwap Service Tx
+    // Inputs: GuapSwapService
     // Data Inputs: None
-    // Outputs: SpectrumERG2TokenSwapBox1, ... , SpectrumERG2TokenSwapBoxM, MinerFee
-    // Context Variables: None
+    // Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, MinerFee
+    // Context Variables: GuapSwapService
 
     // ===== Compile Time Constants ($) ===== //
     // $userPK: SigmaProp
-    // $spectrumDexERG2TokenProxyContractBytes: Coll[Byte]
+    // $serviceContractsBytesHash: Coll[Coll[Byte]]
+    // $guapswapServiceFee: (Long, Long)
+    // $guapswapServiceFeeAddress: SigmaProp
 
     // ===== Context Variables (@) ===== //
-    // @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]
+    // @guapswapServiceData: Coll[Coll[Long]]
 
-    // ===== Spectrum Data ===== //
+    // ===== GuapSwap Service Data ===== //
     // Coll[
-    //     (
-    //         Coll(percentageOfServiceAllocationNum, percentageOfServiceAllocationDenom),
-    //         (
-    //             Coll(exFeePerTokenDenom, delta, baseAmount, maxExFee, minQuoteAmount, maxMinerFee),
-    //             (
-    //                 Coll(feeNum, feeDenom),
-    //                 (
-    //                     Coll(refundProp),
-    //                     (
-    //                         Coll(spectrumIsQuote),
-    //                         Coll(poolNFT, redeemerPropBytes, quoteId, spectrumId, minerPropBytes)
-    //                     )
-    //                 )
-    //             )
-    //         )
+    //     Coll(
+    //          dexServiceMinerFee,
+    //          percentageOfServiceAllocationNum,
+    //          percentageOfServiceAllocationDenom
     //     )
     // ]
-
-    // ===== Spectrum ERG2Token Constants ===== //
-    // {1}  -> ExFeePerTokenDenom: Long
-    // {2}  -> Delta: Long
-    // {3}  -> BaseAmount: Long
-    // {4}  -> FeeNum: Int
-    // {5}  -> RefundProp: ProveDlog
-    // {10} -> SpectrumIsQuote: Boolean
-    // {11} -> MaxExFee: Long
-    // {13} -> PoolNFT: Coll[Byte]
-    // {14} -> RedeemerPropBytes: Coll[Byte]
-    // {15} -> QuoteId: Coll[Byte]
-    // {16} -> MinQuoteAmount: Long
-    // {23} -> SpectrumId: Coll[Byte]
-    // {27} -> FeeDenom: Int
-    // {28} -> MinerPropBytes: Coll[Byte]
-    // {31} -> MaxMinerFee: Long
 
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] = fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
     val minerFee: Long  = SELF.R4[Long].get
-    val serviceAllocation: Long = SELF.value - minerFee
-    val @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))] = getVar[Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]](0).get
-    val spectrumConstantsPositions_Long: Coll[Int]      = Coll(1, 2, 3, 11, 16, 31)
-    val spectrumConstantsPositions_Int: Coll[Int]       = Coll(4, 27)
-    val spectrumConstantsPositions_ProveDlog: Coll[Int] = Coll(5)
-    val spectrumConstantsPositions_Boolean: Coll[Int]   = Coll(10)
-    val spectrumConstantsPositions_ByteColl: Coll[Int]  = Coll(13, 14, 15, 23, 28)
+    val guapswapServiceFeeAmount: Long = (SELF.value * $guapswapServiceFee._1) / $guapswapServiceFee._2
+    val serviceAllocation: Long = SELF.value - guapswapServiceFee - minerFee
 
     // ===== GuapSwap Service Tx ===== //
     val validGuapSwapServiceTx: Boolean = {
 
         // Outputs
+        val guapswapServiceFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
         val minerFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
 
         val validDexServiceBoxes: Boolean = {
 
+            @guapswapServiceData.indices.forall({ (i: Int) =>
+            
+                val dexServiceBoxOUT: Box = OUTPUTS(i)
+                val guapswapDatum: Coll[Long] = @guapswapServiceData(i)
+                val dexServiceContractBytesHash: Coll[Byte] = $serviceContractsBytesHash(i)
 
+                val dexServiceMinerFee: Long = guapswapDatum(0)
+                val percentageOfServiceAllocationNum: Long = guapswapDatum(1)
+                val percentageOfServiceAllocationDenom: Long = guapswapDatum(2)
+
+                val validDexServiceBox: Boolean = {
+
+                    val validAllocation: Boolean = {
+
+                        val allocationAmount: Long = (serviceAllocation * percentageOfServiceAllocationNum) / percentageOfServiceAllocationDenom
+
+                        (dexServiceBoxOUT.value == allocationAmount)
+
+                    }
+
+                    val validDexServiceContract: Boolean = {
+
+                        (blake2b256(dexServiceBoxOUT.propositionBytes) == dexServiceContractBytesHash)
+
+                    }
+                    
+                    val validDexServiceMinerFee: Boolean = {
+
+                        (dexServiceBoxOUT.R4[Long].get == serviceMinerFee)
+
+                    }
+
+                    allOf(Coll(
+                        validAllocation,
+                        validDexServiceContract,
+                        validDexServiceMinerFee
+                    ))
+
+                }
+
+                validDexServiceBox
+
+            })
+
+        }
+
+        val validGuapSwapServiceFee: Boolean = {
+
+            allOf(Coll(
+                (guapswapServiceFeeBoxOUT.value == guapswapServiceFeeAmount),
+                (guapswapServiceFeeBoxOUT.propositionBytes == guapswapServiceFeeAddress.propBytes)
+            ))
 
         }
 
@@ -97,6 +118,7 @@
 
         allOf(Coll(
             validDexServiceBoxes,
+            validGuapSwapServiceFee,
             validMinerFee
         ))
 

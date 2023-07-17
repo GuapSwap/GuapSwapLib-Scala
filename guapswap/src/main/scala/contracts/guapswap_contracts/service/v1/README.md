@@ -20,13 +20,15 @@ Registers
 1. GuapSwap Service Tx
 - Inputs: GuapSwapService
 - DataInputs: None
-- Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, ... MinerFee
-- Context Variables: None
+- Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, MinerFee
+- Context Variables: GuapSwapServiceData
 
 ### Compile Time Constants ($)
-- $userPK
-- $spectrumDexServiceContractBytesHash: Coll[Byte]
+- $userPK: SigmaProp
+- $serviceContractsBytesHash: Coll[Coll[Byte]]
+- $guapswapServiceFee: (Long, Long)
+- $guapswapServiceFeeAddress: SigmaProp
 
 ### Context Variables (@)
-- $guapswapServiceData: Coll[(Long, Long)]
+- @guapswapServiceData: Coll[Coll[Long]]
 

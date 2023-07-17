@@ -10,7 +10,7 @@
     // Tokens
     // None
     // Registers
-    // R4: Long         MinerFee
+    // R4: Long MinerFee
 
     // ===== Relevant Transactions ===== //
     // 1. GuapSwap Spectrum Dex Service Tx
