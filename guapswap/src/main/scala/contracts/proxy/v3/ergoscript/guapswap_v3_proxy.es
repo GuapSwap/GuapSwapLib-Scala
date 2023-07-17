@@ -1,9 +1,9 @@
 {
 
     // ===== Contract Information ===== //
-    // Name: GuapSwap Spectrum Dex Service Contract
-    // Description: This contract guards the Spectrum Dex service contract which ensures the ERG in this box gets swapped in the appropriate way through the Spectrum Dex bots.
-    // Version: 1.0.0
+    // Name: GuapSwap Proxy
+    // Description: This contract guards the proxy box which is used by miners to receiver their mining rewards and to interact with the GuapSwap protocol.
+    // Version: 3.0.0
     // Author: Luca D'Angelo (luca.dangelo@guapswap.org)
 
     // ===== Box Contents ===== //

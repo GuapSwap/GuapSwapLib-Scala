@@ -1,26 +1,25 @@
-# GuapSwap: Service Contract - v1.0.0
+# GuapSwap Protocol: Proxy Contract - v3.0.0
 
 ## Contract
-
-[ErgoScript](ergoscript/guapswap_v1_service.es)
+[ErgoScript](ergoscript/guapswap_v3_proxy.es)
 
 ## Documentation
 
 ### Description
-This contract guards the service box for the GuapSwap service and ensures all dex swapping services are proper outputs.
+This contract guards the proxy box which is used by miners to receiver their mining rewards and to interact with the GuapSwap protocol.
 
 ### Box Contents
 Tokens
 - None
-
+  
 Registers
 - R4: Long MinerFee
 
 ### Relevant Transactions
 1. GuapSwap Service Tx
-- Inputs: GuapSwapService
+- Inputs: GuapSwapProxy
 - DataInputs: None
-- Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, MinerFee
+- Outputs: GuapSwapService1, ... , GuapSwapServiceN
 - Context Variables: GuapSwapServiceData
 
 ### Compile Time Constants ($)
@@ -30,5 +29,5 @@ Registers
 - $guapswapServiceFeeAddress: SigmaProp
 
 ### Context Variables (@)
-- @guapswapServiceData: Coll[(Int, Coll[Long])]
+- @guapswapServiceData: Coll[Coll[Long]]
 
