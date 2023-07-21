@@ -14,22 +14,20 @@ Tokens
 - None
 
 Registers
-- R4: (Long, Long)                      GuapDropFee
-- R5: Coll[Byte]                        GuapDropFeeAddressBytes
-- R6: Long                              MinerFee
-- R7: SigmaProp                         UserPK
-- R8: Coll[(SigmaProp, (Long, Long))]   ReceiverData
+- R4: Long MinerFee
 
 ### Relevant Transactions
 1. GuapDrop Tx
 - Inputs: GuapDropService
 - DataInputs: None
 - Outputs: Receiver1, ... , ReceiverM, GuapDropFee, MinerFee
-- Context Variables: None
+- Context Variables: ReceiverData
 
 ### Compile Time Constants ($)
-- None
+- $userPK: SigmaProp
+- $guapdropServiceFee: (Long, Long)
+- $guapdropServiceFeeAddress: SigmaProp
 
 ### Context Variables (@)
-- None
+- @receiverData: Coll[(SigmaProp, (Long, Long))]
 

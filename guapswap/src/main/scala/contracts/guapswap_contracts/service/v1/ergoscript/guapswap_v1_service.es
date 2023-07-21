@@ -29,16 +29,16 @@
     // @guapswapServiceData: Coll[(Int, Coll[Long])]
 
     // ===== GuapSwap Service Data ===== //
-    // Coll[
-    //     (
-    //         serviceIndex,
-    //         Coll(
-    //                 dexServiceMinerFee,
-    //                 percentageOfServiceAllocationNum,
-    //                 percentageOfServiceAllocationDenom
+    // Coll(
+    //         (
+    //             serviceIndex,
+    //             Coll(
+    //                     dexServiceMinerFee,
+    //                     percentageOfServiceAllocationNum,
+    //                     percentageOfServiceAllocationDenom
+    //             )
     //         )
-    //     )
-    // ]
+    // )
 
     // ===== Service Index ===== //
     // 0 => Spectrum Dex Service
@@ -111,7 +111,7 @@
 
             allOf(Coll(
                 (guapswapServiceFeeBoxOUT.value == guapswapServiceFeeAmount),
-                (guapswapServiceFeeBoxOUT.propositionBytes == guapswapServiceFeeAddress.propBytes)
+                (guapswapServiceFeeBoxOUT.propositionBytes == $guapswapServiceFeeAddress.propBytes)
             ))
 
         }

@@ -27,24 +27,24 @@
     // @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]
 
     // ===== Spectrum Data ===== //
-    // Coll[
-    //     (
-    //         Coll(percentageOfServiceAllocationNum, percentageOfServiceAllocationDenom),
+    // Coll(
     //         (
-    //             Coll(exFeePerTokenDenom, delta, baseAmount, maxExFee, minQuoteAmount, maxMinerFee),
+    //             Coll(percentageOfServiceAllocationNum, percentageOfServiceAllocationDenom),
     //             (
-    //                 Coll(feeNum, feeDenom),
+    //                 Coll(exFeePerTokenDenom, delta, baseAmount, maxExFee, minQuoteAmount, maxMinerFee),
     //                 (
-    //                     Coll(refundProp),
+    //                     Coll(feeNum, feeDenom),
     //                     (
-    //                         Coll(spectrumIsQuote),
-    //                         Coll(poolNFT, redeemerPropBytes, quoteId, spectrumId, minerPropBytes)
+    //                         Coll(refundProp),
+    //                         (
+    //                             Coll(spectrumIsQuote),
+    //                             Coll(poolNFT, redeemerPropBytes, quoteId, spectrumId, minerPropBytes)
+    //                         )
     //                     )
     //                 )
     //             )
     //         )
-    //     )
-    // ]
+    // )
 
     // ===== Spectrum ERG2Token Constants ===== //
     // {1}  -> ExFeePerTokenDenom: Long
