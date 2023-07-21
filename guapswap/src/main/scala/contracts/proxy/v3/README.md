@@ -16,18 +16,17 @@ Registers
 - R4: Long MinerFee
 
 ### Relevant Transactions
-1. GuapSwap Service Tx
+1. Service Selection Tx
 - Inputs: GuapSwapProxy
 - DataInputs: None
-- Outputs: GuapSwapService1, ... , GuapSwapServiceN
-- Context Variables: GuapSwapServiceData
+- Outputs: Service1, ... , ServiceN, MinerFee
+- Context Variables: ServiceData
 
 ### Compile Time Constants ($)
 - $userPK: SigmaProp
 - $serviceContractsBytesHash: Coll[Coll[Byte]]
-- $guapswapServiceFee: (Long, Long)
-- $guapswapServiceFeeAddress: SigmaProp
 
 ### Context Variables (@)
-- @guapswapServiceData: Coll[Coll[Long]]
+- @serviceData: Coll[(Int, Coll[Long])]
+- @minerFee: Long
 

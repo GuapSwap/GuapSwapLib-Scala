@@ -13,27 +13,26 @@
     // R4: Long MinerFee
 
     // ===== Relevant Transactions ===== //
-    // 1. GuapSwap Service Tx
-    // Inputs: GuapSwapService
+    // 1. Service Selection Tx
+    // Inputs: GuapSwapProxy
     // Data Inputs: None
-    // Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, MinerFee
-    // Context Variables: GuapSwapService
+    // Outputs: Service1, ... , ServiceN, MinerFee
+    // Context Variables: ServiceData
 
     // ===== Compile Time Constants ($) ===== //
     // $userPK: SigmaProp
     // $serviceContractsBytesHash: Coll[Coll[Byte]]
-    // $guapswapServiceFee: (Long, Long)
-    // $guapswapServiceFeeAddress: SigmaProp
 
     // ===== Context Variables (@) ===== //
-    // @guapswapServiceData: Coll[(Int, Coll[Long])]
+    // @serviceData: Coll[(Int, Coll[Long])]
+    // @minerFee: Long
 
-    // ===== GuapSwap Service Data ===== //
+    // ===== Service Data ===== //
     // Coll[
     //     (
     //         serviceIndex,
-    //         Coll(
-    //                 dexServiceMinerFee,
+    //         Coll(   
+    //                 serviceMinerFee,
     //                 percentageOfServiceAllocationNum,
     //                 percentageOfServiceAllocationDenom
     //         )
@@ -41,97 +40,87 @@
     // ]
 
     // ===== Service Index ===== //
-    // 0 => Spectrum Dex Service
+    // 0 => GuapSwap Service
+    // 1 => GuapDrop Service
     // More indices will be supported when other DEXs become available.
 
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] = fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
-    val minerFee: Long  = SELF.R4[Long].get
-    val guapswapServiceFeeAmount: Long = (SELF.value * $guapswapServiceFee._1) / $guapswapServiceFee._2
-    val serviceAllocation: Long = SELF.value - guapswapServiceFee - minerFee
+    val @serviceData: Coll[(Int, Coll[Long])] = getVar[Coll[(Int, Coll[Long])]](0).get
+    val @minerFee: Long = getVar[Long](1).get
+    val serviceAllocation: Long = OUTPUTS.map({ (output: Box) => output.value }).fold(0L, { (acc: Long, curr: Long) => acc + curr }) - @minerFee
 
-    // ===== GuapSwap Service Tx ===== //
-    val validGuapSwapServiceTx: Boolean = {
+    // ===== Service Selection Tx ===== //
+    val validServiceSelectionTx: Boolean = {
 
         // Outputs
-        val guapswapServiceFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
         val minerFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
 
-        val validDexServiceBoxes: Boolean = {
+        val validServiceContractBoxes: Boolean = {
 
-            @guapswapServiceData.indices.forall({ (i: Int) =>
+             @serviceData.indices.forall({ (i: Int) =>
             
-                val dexServiceBoxOUT: Box = OUTPUTS(i)
-                val guapswapDatum: Coll[Long] = @guapswapServiceData(i)
-                val serviceIndex: Int = guapswapDatum._1
-                val dexServiceContractBytesHash: Coll[Byte] = $serviceContractsBytesHash(serviceIndex)
+                val serviceContractBoxOUT: Box = OUTPUTS(i)
+                val serviceDatum: Coll[Long] = @serviceData(i)
+                val serviceIndex: Int = serviceDatum._1
+                val serviceContractBytesHash: Coll[Byte] = $serviceContractsBytesHash(serviceIndex)
 
-                val dexServiceMinerFee: Long = guapswapDatum._2(0)
-                val percentageOfServiceAllocationNum: Long = guapswapDatum._2(1)
-                val percentageOfServiceAllocationDenom: Long = guapswapDatum._2(2)
+                val serviceMinerFee: Long = serviceDatum._2(0)
+                val percentageOfServiceAllocationNum: Long = serviceDatum._2(1)
+                val percentageOfServiceAllocationDenom: Long = serviceDatum._2(2)
 
-                val validDexServiceBox: Boolean = {
+                val validServiceContractBox: Boolean = {
 
                     val validAllocation: Boolean = {
 
                         val allocationAmount: Long = (serviceAllocation * percentageOfServiceAllocationNum) / percentageOfServiceAllocationDenom
 
-                        (dexServiceBoxOUT.value == allocationAmount)
+                        (serviceContractBoxOUT.value == allocationAmount)
 
                     }
 
-                    val validDexServiceContract: Boolean = {
+                    val validServiceContract: Boolean = {
 
-                        (blake2b256(dexServiceBoxOUT.propositionBytes) == dexServiceContractBytesHash)
+                        (blake2b256(serviceContractBoxOUT.propositionBytes) == serviceContractBytesHash)
 
                     }
                     
-                    val validDexServiceMinerFee: Boolean = {
+                    val validServiceMinerFee: Boolean = {
 
-                        (dexServiceBoxOUT.R4[Long].get == serviceMinerFee)
+                        (serviceContractBoxOUT.R4[Long].get == serviceMinerFee)
 
                     }
 
                     allOf(Coll(
                         validAllocation,
-                        validDexServiceContract,
-                        validDexServiceMinerFee
+                        validServiceContract,
+                        validServiceMinerFee
                     ))
 
                 }
 
-                validDexServiceBox
+                validServiceContractBox
 
             })
-
-        }
-
-        val validGuapSwapServiceFee: Boolean = {
-
-            allOf(Coll(
-                (guapswapServiceFeeBoxOUT.value == guapswapServiceFeeAmount),
-                (guapswapServiceFeeBoxOUT.propositionBytes == guapswapServiceFeeAddress.propBytes)
-            ))
 
         }
 
         val validMinerFee: Boolean = {
 
             allOf(Coll(
-                (minerFeeBoxOUT.value == minerFee),
+                (minerFeeBoxOUT.value == @minerFee),
                 (blake2b256(minerFeeBoxOUT.propositionBytes) == minerFeeErgoTreeBytesHash)
             ))
 
         }
 
         allOf(Coll(
-            validDexServiceBoxes,
-            validGuapSwapServiceFee,
+            validServiceContractBoxes,
             validMinerFee
         ))
 
     }
 
-    (sigmaProp(validGuapSwapServiceTx) && $userPK) || $userPK
+    (sigmaProp(validServiceSelectionTx) && $userPK) || $userPK
 
 }

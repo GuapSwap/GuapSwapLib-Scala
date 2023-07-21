@@ -16,12 +16,12 @@
     // 1. GuapSwap Service Tx
     // Inputs: GuapSwapService
     // Data Inputs: None
-    // Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, MinerFee
-    // Context Variables: GuapSwapService
+    // Outputs: GuapSwapDexService1, ... , GuapSwapDexServiceM, GuapSwapFee, MinerFee
+    // Context Variables: GuapSwapServiceData
 
     // ===== Compile Time Constants ($) ===== //
     // $userPK: SigmaProp
-    // $serviceContractsBytesHash: Coll[Coll[Byte]]
+    // $dexServiceContractsBytesHash: Coll[Coll[Byte]]
     // $guapswapServiceFee: (Long, Long)
     // $guapswapServiceFeeAddress: SigmaProp
 
@@ -46,7 +46,8 @@
 
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] = fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
-    val minerFee: Long  = SELF.R4[Long].get
+    val minerFee: Long = SELF.R4[Long].get
+    val @guapswapServiceData: Coll[(Int, Coll[Long])] = getVar[Coll[(Int, Coll[Long])]](0).get
     val guapswapServiceFeeAmount: Long = (SELF.value * $guapswapServiceFee._1) / $guapswapServiceFee._2
     val serviceAllocation: Long = SELF.value - guapswapServiceFee - minerFee
 
@@ -64,7 +65,7 @@
                 val dexServiceBoxOUT: Box = OUTPUTS(i)
                 val guapswapDatum: Coll[Long] = @guapswapServiceData(i)
                 val serviceIndex: Int = guapswapDatum._1
-                val dexServiceContractBytesHash: Coll[Byte] = $serviceContractsBytesHash(serviceIndex)
+                val dexServiceContractBytesHash: Coll[Byte] = $dexServiceContractsBytesHash(serviceIndex)
 
                 val dexServiceMinerFee: Long = guapswapDatum._2(0)
                 val percentageOfServiceAllocationNum: Long = guapswapDatum._2(1)
@@ -106,7 +107,7 @@
 
         }
 
-        val validGuapSwapServiceFee: Boolean = {
+        val validGuapSwapFee: Boolean = {
 
             allOf(Coll(
                 (guapswapServiceFeeBoxOUT.value == guapswapServiceFeeAmount),
@@ -126,7 +127,7 @@
 
         allOf(Coll(
             validDexServiceBoxes,
-            validGuapSwapServiceFee,
+            validGuapSwapFee,
             validMinerFee
         ))
 
