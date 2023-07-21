@@ -4,7 +4,7 @@ inThisBuild(List(
   organization := "org.guapswap",  // groupId
   name := "guapswaplib",     // artifactId
   homepage := Some(url("https://guapswap.org")),
-  licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
+  licenses := Seq("GPL-3.0" -> url("https://spdx.org/licenses/GPL-3.0-or-later.html")),
   description := "GuapSwapLib library written in Scala.",
   scmInfo := Some(
     ScmInfo(
