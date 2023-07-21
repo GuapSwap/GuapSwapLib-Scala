@@ -2,14 +2,14 @@ import dependencies._
 
 inThisBuild(List(
   organization := "org.guapswap",  // groupId
-  name := "guapswaplib-scala",     // artifactId
+  name := "guapswaplib",     // artifactId
   homepage := Some(url("https://guapswap.org")),
   licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   description := "GuapSwapLib library written in Scala.",
   scmInfo := Some(
     ScmInfo(
-      url("https://github.com/GuapSwap/guapswaplib-scala"),
-      "scm:git@github.com:GuapSwap/guapswaplib-scala.git"
+      url("https://github.com/GuapSwap/guapswaplib"),
+      "scm:git@github.com:GuapSwap/guapswaplib.git"
     )
   ),
   developers := List(
