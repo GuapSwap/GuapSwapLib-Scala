@@ -11,35 +11,40 @@
     // Tokens
     // None
     // Registers
-    // R4: (Long, Long)                     GuapDropFee
-    // R5: Coll[Byte]                       GuapDropFeeAddressBytes
-    // R6: Long                             MinerFee
-    // R7: SigmaProp                        UserPK
-    // R8: Coll[(SigmaProp, (Long, Long))]  ReceiverData
+    // R4: Long MinerFee
 
     // ===== Relevant Transactions ===== //
     // 1. GuapDrop Tx
     // Inputs: GameDropService
     // DataInputs: None
     // Outputs: Receiver1, ... , ReceiverM, GuapDropFee, MinerFee
-    // Context Variables: None
+    // Context Variables: ReceiverData
     
     // ===== Compile Time Constants ($) ===== //
-    // None
+    // $userPK: SigmaProp
+    // $guapdropServiceFee: (Long, Long)
+    // $guapdropServiceFeeAddress: SigmaProp
 
     // ===== Context Variables (@) ===== //
-    // None
+    // @receiverData: Coll[(SigmaProp, (Long, Long))]
 
-    // ===== Relevant Variables ===== //
-    val guapdropFee: (Long, Long) = SELF.R4[(Long, Long)].get
-    val guapdropFeeAddressBytes: Coll[Byte] = SELF.R5[Coll[Byte]].get
-    val minerFee: Long = SELF.R6[Long].get
-    val userPK: SigmaProp = SELF.R7[SigmaProp].get
-    val receiverData: Coll[(SigmaProp, (Long, Long))] = SELF.R8[Coll[(SigmaProp, (Long, Long))]].get
-    val minerFeeAddress: SigmaProp = PK("2iHkR7CWvD1R4j1yZg5bkeDRQavjAaVPeTDFGGLZduHyfWMuYpmhHocX8GJoaieTx78FntzJbCBVL6rf96ocJoZdmWBL2fci7NqWgAirppPQmZ7fN9V6z13Ay6brPriBKYqLp1bT2Fk4FkFLCfdPpe")
-    val userAmountAfterMinerFee: Long = (SELF.value - minerFee)
-    val guapdropFeeAmount: Long = (userAmountAfterMinerFee * guapdropFee._1) / guapdropFee._2
-    val userAmount: Long = userAmountAfterMinerFee - guapdropFeeAmount
+    // ===== Receiver Data ===== //
+    // Coll(
+    //         (
+    //             receiverAddress,
+    //             (
+    //                 receiverPercentageNum,
+    //                 receiverPercentageDenom
+    //             )
+    //         )
+    // )
+
+    // ===== Global Variables ===== //
+    val minerFeeErgoTreeBytesHash: Coll[Byte] =fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
+    val @receiverData: Coll[(SigmaProp, (Long, Long))] = getVar[Coll[(SigmaProp, (Long, Long))]](0).get
+    val minerFee: Long = SELF.R4[Long].get
+    val guapdropServiceFeeAmount: Long = (SELF.value * $guapdropServiceFee._1) / $guapdropServiceFee._2
+    val serviceAllocation: Long = SELF.value - guapdropFeeAmount - minerFee
 
     // ===== GuapDrop Tx ===== //
     val validGuapDropTx: Boolean = {
@@ -48,20 +53,41 @@
         val guapdropFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-2)
         val minerFeeBoxOUT: Box = OUTPUTS(OUTPUTS.size-1)
 
-        val validReceivers: Boolean = {
+        val validReceiverBoxes: Boolean = {
 
-            receiverData.indices.forall({ (index: Int) => 
+            @receiverData.indices.forall({ (i: Int) => 
             
-                val receiverBoxOUT: Box = OUTPUTS(index)
-                val data: (SigmaProp, (Long, Long)) = receiverData.get(index)
-                val receiverPK: SigmaProp = data._1
-                val receiverPercentage: (Long, Long) = data._2
-                val receiverAmount: Long = (userAmount * receiverPercentage._1) / receiverPercentage._2
-                
-                allOf(Coll(
-                    (receiverBoxOUT.value = receiverAmount),
-                    (receiverBoxOUT.propositionBytes = receiverPK.propBytes)
-                ))
+                val receiverBoxOUT: Box = OUTPUTS(i)
+                val receiverDatum: (SigmaProp, (Long, Long)) = @receiverData(i)
+                val receiverAddress: SigmaProp = receiverDatum._1
+                val receiverPercentageNum: Long = data._2._1
+                val receiverPercentageDenom: Long = data._2._1
+
+                val validReceiverBox: Boolean = {
+
+                    val validAllocation: Boolean = {
+
+                        val receiverAmount: Long = (userAmount * receiverPercentageNum) / receiverPercentageDenom
+                        
+                        (receiverBoxOUT.value = receiverAmount)
+
+                    }
+
+                    val validReceiverAddress: Boolean = {
+
+                        (receiverBoxOUT.propositionBytes = receiverAddress.propBytes)
+
+                    }
+                    
+                    
+                    allOf(Coll(
+                        validAllocation,
+                        validReceiverAddress                    
+                    ))
+
+                }
+
+                validReceiverBox
 
             })
 
@@ -70,8 +96,8 @@
         val validGuapDropFee: Boolean = {
 
             allOf(Coll(
-                (guapdropFeeBoxOUT.value == guapdropFeeAmount),
-                (guapdropFeeBoxOUT.propositionBytes == guapdropFeeAddressBytes)
+                (guapdropFeeBoxOUT.value == guapdropServiceFeeAmount),
+                (guapdropFeeBoxOUT.propositionBytes == $guapdropServiceFeeAddress.propBytes)
             ))
 
         }
@@ -86,13 +112,13 @@
         }
 
         allOf(Coll(
-            validReceivers,
+            validReceiverBoxes,
             validGuapDropFee,
             validMinerFee
         ))
 
     }
 
-    sigmaProp(validGuapDropTx) && userPK
+    (sigmaProp(validGuapDropTx) && $userPK) || $userPK
 
 }
