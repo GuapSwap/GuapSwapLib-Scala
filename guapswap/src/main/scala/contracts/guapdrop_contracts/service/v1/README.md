@@ -14,7 +14,7 @@ Tokens
 - None
 
 Registers
-- R4: Long MinerFee
+- None
 
 ### Relevant Transactions
 1. GuapDrop Tx
@@ -30,4 +30,4 @@ Registers
 
 ### Context Variables (@)
 - @receiverData: Coll[(SigmaProp, (Long, Long))]
-
+- @minerFee: Long

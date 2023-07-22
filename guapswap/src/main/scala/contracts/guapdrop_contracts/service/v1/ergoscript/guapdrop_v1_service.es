@@ -11,7 +11,7 @@
     // Tokens
     // None
     // Registers
-    // R4: Long MinerFee
+    // None
 
     // ===== Relevant Transactions ===== //
     // 1. GuapDrop Tx
@@ -27,6 +27,7 @@
 
     // ===== Context Variables (@) ===== //
     // @receiverData: Coll[(SigmaProp, (Long, Long))]
+    // @minerFee: Long
 
     // ===== Receiver Data ===== //
     // Coll(
@@ -42,9 +43,9 @@
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] =fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
     val @receiverData: Coll[(SigmaProp, (Long, Long))] = getVar[Coll[(SigmaProp, (Long, Long))]](0).get
-    val minerFee: Long = SELF.R4[Long].get
+    val @minerFee: Long = getVar[Long](1).get
     val guapdropServiceFeeAmount: Long = (SELF.value * $guapdropServiceFee._1) / $guapdropServiceFee._2
-    val serviceAllocation: Long = SELF.value - guapdropFeeAmount - minerFee
+    val serviceAllocation: Long = SELF.value - guapdropFeeAmount - @minerFee
 
     // ===== GuapDrop Tx ===== //
     val validGuapDropTx: Boolean = {
@@ -105,7 +106,7 @@
         val validMinerFee: Boolean = {
 
             allOf(Coll(
-                (minerFeeBoxOUT.value == minerFee),
+                (minerFeeBoxOUT.value == @minerFee),
                 (minerFeeBoxOUT.propositionBytes == minerFeeAddress.propBytes)
             ))
 

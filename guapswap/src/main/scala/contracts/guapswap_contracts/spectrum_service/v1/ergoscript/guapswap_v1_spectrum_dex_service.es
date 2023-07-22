@@ -10,7 +10,7 @@
     // Tokens
     // None
     // Registers
-    // R4: Long MinerFee
+    // None
 
     // ===== Relevant Transactions ===== //
     // 1. GuapSwap Spectrum Dex Service Tx
@@ -25,6 +25,7 @@
 
     // ===== Context Variables (@) ===== //
     // @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]
+    // @minerFee: Long
 
     // ===== Spectrum Data ===== //
     // Coll(
@@ -65,9 +66,9 @@
 
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] = fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
-    val minerFee: Long  = SELF.R4[Long].get
-    val serviceAllocation: Long = SELF.value - minerFee
     val @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))] = getVar[Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]](0).get
+    val @minerFee: Long = getVar[Long](1).get
+    val serviceAllocation: Long                         = SELF.value - @minerFee
     val spectrumConstantsPositions_Long: Coll[Int]      = Coll(1, 2, 3, 11, 16, 31)
     val spectrumConstantsPositions_Int: Coll[Int]       = Coll(4, 27)
     val spectrumConstantsPositions_ProveDlog: Coll[Int] = Coll(5)
@@ -136,7 +137,7 @@
         val validMinerFee: Boolean = {
 
             allOf(Coll(
-                (minerFeeBoxOUT.value == minerFee),
+                (minerFeeBoxOUT.value == @minerFee),
                 (blake2b256(minerFeeBoxOUT.propositionBytes) == minerFeeErgoTreeBytesHash)
             ))
 

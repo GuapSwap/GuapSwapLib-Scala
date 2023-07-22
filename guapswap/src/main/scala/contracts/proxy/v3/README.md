@@ -27,6 +27,6 @@ Registers
 - $serviceContractsBytesHash: Coll[Coll[Byte]]
 
 ### Context Variables (@)
-- @serviceData: Coll[(Int, Coll[Long])]
+- @serviceData: Coll[(Int, (Long, Long))]
 - @minerFee: Long
 

@@ -14,7 +14,7 @@ Tokens
 - None
 
 Registers
-- R4: Long MinerFee
+- None
 
 ### Relevant Transactions
 1. GuapSwap Service Tx
@@ -30,5 +30,5 @@ Registers
 - $guapswapServiceFeeAddress: SigmaProp
 
 ### Context Variables (@)
-- @guapswapServiceData: Coll[(Int, Coll[Long])]
-
+- @guapswapServiceData: Coll[(Int, (Long, Long))]
+- @minerFee: Long

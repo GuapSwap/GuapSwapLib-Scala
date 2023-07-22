@@ -10,7 +10,7 @@
     // Tokens
     // None
     // Registers
-    // R4: Long MinerFee
+    // None
 
     // ===== Relevant Transactions ===== //
     // 1. GuapSwap Service Tx
@@ -26,16 +26,16 @@
     // $guapswapServiceFeeAddress: SigmaProp
 
     // ===== Context Variables (@) ===== //
-    // @guapswapServiceData: Coll[(Int, Coll[Long])]
+    // @guapswapServiceData: Coll[(Int, (Long, Long))]
+    // @minerFee: Long
 
     // ===== GuapSwap Service Data ===== //
     // Coll(
     //         (
     //             serviceIndex,
-    //             Coll(
-    //                     dexServiceMinerFee,
-    //                     percentageOfServiceAllocationNum,
-    //                     percentageOfServiceAllocationDenom
+    //             (
+    //                  percentageOfServiceAllocationNum,
+    //                  percentageOfServiceAllocationDenom
     //             )
     //         )
     // )
@@ -46,10 +46,10 @@
 
     // ===== Global Variables ===== //
     val minerFeeErgoTreeBytesHash: Coll[Byte] = fromBase16("e540cceffd3b8dd0f401193576cc413467039695969427df94454193dddfb375")
-    val minerFee: Long = SELF.R4[Long].get
     val @guapswapServiceData: Coll[(Int, Coll[Long])] = getVar[Coll[(Int, Coll[Long])]](0).get
+    val @minerFee: Long = getVar[Long](1).get
     val guapswapServiceFeeAmount: Long = (SELF.value * $guapswapServiceFee._1) / $guapswapServiceFee._2
-    val serviceAllocation: Long = SELF.value - guapswapServiceFee - minerFee
+    val serviceAllocation: Long = SELF.value - guapswapServiceFee - @minerFee
 
     // ===== GuapSwap Service Tx ===== //
     val validGuapSwapServiceTx: Boolean = {
@@ -67,9 +67,8 @@
                 val serviceIndex: Int = guapswapDatum._1
                 val dexServiceContractBytesHash: Coll[Byte] = $dexServiceContractsBytesHash(serviceIndex)
 
-                val dexServiceMinerFee: Long = guapswapDatum._2(0)
-                val percentageOfServiceAllocationNum: Long = guapswapDatum._2(1)
-                val percentageOfServiceAllocationDenom: Long = guapswapDatum._2(2)
+                val percentageOfServiceAllocationNum: Long = guapswapDatum._2._1
+                val percentageOfServiceAllocationDenom: Long = guapswapDatum._2._2
 
                 val validDexServiceBox: Boolean = {
 
@@ -86,17 +85,10 @@
                         (blake2b256(dexServiceBoxOUT.propositionBytes) == dexServiceContractBytesHash)
 
                     }
-                    
-                    val validDexServiceMinerFee: Boolean = {
-
-                        (dexServiceBoxOUT.R4[Long].get == serviceMinerFee)
-
-                    }
-
+                
                     allOf(Coll(
                         validAllocation,
-                        validDexServiceContract,
-                        validDexServiceMinerFee
+                        validDexServiceContract
                     ))
 
                 }
@@ -119,7 +111,7 @@
         val validMinerFee: Boolean = {
 
             allOf(Coll(
-                (minerFeeBoxOUT.value == minerFee),
+                (minerFeeBoxOUT.value == @minerFee),
                 (blake2b256(minerFeeBoxOUT.propositionBytes) == minerFeeErgoTreeBytesHash)
             ))
 
