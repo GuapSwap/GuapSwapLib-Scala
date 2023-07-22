@@ -31,10 +31,9 @@
     // Coll[
     //     (
     //         serviceIndex,
-    //         Coll(   
-    //                 serviceMinerFee,
-    //                 percentageOfServiceAllocationNum,
-    //                 percentageOfServiceAllocationDenom
+    //         (   
+    //              percentageOfServiceAllocationNum,
+    //              percentageOfServiceAllocationDenom
     //         )
     //     )
     // ]
@@ -65,9 +64,8 @@
                 val serviceIndex: Int = serviceDatum._1
                 val serviceContractBytesHash: Coll[Byte] = $serviceContractsBytesHash(serviceIndex)
 
-                val serviceMinerFee: Long = serviceDatum._2(0)
-                val percentageOfServiceAllocationNum: Long = serviceDatum._2(1)
-                val percentageOfServiceAllocationDenom: Long = serviceDatum._2(2)
+                val percentageOfServiceAllocationNum: Long = serviceDatum._2._1
+                val percentageOfServiceAllocationDenom: Long = serviceDatum._2._2
 
                 val validServiceContractBox: Boolean = {
 
@@ -84,17 +82,10 @@
                         (blake2b256(serviceContractBoxOUT.propositionBytes) == serviceContractBytesHash)
 
                     }
-                    
-                    val validServiceMinerFee: Boolean = {
-
-                        (serviceContractBoxOUT.R4[Long].get == serviceMinerFee)
-
-                    }
 
                     allOf(Coll(
                         validAllocation,
-                        validServiceContract,
-                        validServiceMinerFee
+                        validServiceContract
                     ))
 
                 }

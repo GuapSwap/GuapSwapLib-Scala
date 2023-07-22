@@ -14,7 +14,7 @@ Tokens
 - None
 
 Registers
-- R4: Long MinerFee
+- None
 
 ### Relevant Transactions
 1. GuapSwap Spectrum Dex Service Tx
@@ -29,4 +29,5 @@ Registers
 
 ### Context Variables (@)
 - @spectrumData: Coll[(Coll[Long], (Coll[Long], (Coll[Int], (Coll[ProveDlog], (Coll[Boolean], Coll[Coll[Byte]])))))]
+- @minerFee: Long
 
