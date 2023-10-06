@@ -1,9 +1,9 @@
 package org.guapswap.commons.dex.spectrum.spectrum_builders.contract_builders
 
-import org.ergoplatform.appkit.{BlockchainContext, ConstantsBuilder, ErgoContract, ErgoValue, JavaHelpers}
+import org.ergoplatform.appkit.scalaapi.ErgoValueBuilder
+import org.ergoplatform.appkit.{Address, BlockchainContext, ConstantsBuilder, ErgoContract, ErgoType, ErgoValue, JavaHelpers}
 import org.guapswap.commons.dex.spectrum.{SpectrumDex, SpectrumErgoPool}
 import org.guapswap.commons.ergo.ErgoBlockchainAssets
-
 import sigmastate.{SType, Values}
 import sigmastate.Values.ErgoTree
 import sigmastate.basics.DLogProtocol.ProveDlog
@@ -80,10 +80,12 @@ object SpectrumERG2TokenContractBuilder {
             slippageTolerancePercentage: Double,
             nitro: Double,
             spectrumMinerFee: Long,
-            redeemerPropBytes: ErgoValue[Coll[java.lang.Byte]],
-            refundPropBytes: ErgoValue[ProveDlog]
+            redeemerAddress: String,
+            refundAddress: String
            )(implicit ctx: BlockchainContext): SpectrumERG2TokenContractBuilder = {
 
+    val redeemerPropBytes: ErgoValue[Coll[java.lang.Byte]] = ErgoValue.of(Address.create(redeemerAddress).toPropositionBytes)
+    val refundPropBytes: ErgoValue[ProveDlog] = ErgoValue.of(ProveDlog(Address.create(refundAddress).getPublicKey.value))
     val swapBuyContract: ErgoTree = JavaHelpers.decodeStringToErgoTree(n2t_v3_swapsell_ergotree)
     val swapBuyConstants: IndexedSeq[Values.Constant[SType]] = swapBuyContract.constants
 

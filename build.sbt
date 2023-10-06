@@ -29,6 +29,7 @@ lazy val guapswap = (project in file("guapswap"))
     moduleName := "guapswap",
     description := "guapswap package for guapswaplib"
   )
+  .dependsOn(commons)
 
 //lazy val oasis = utils
 //  .mkModule("oasis", "guapswap-oasis package for guapswaplib")
