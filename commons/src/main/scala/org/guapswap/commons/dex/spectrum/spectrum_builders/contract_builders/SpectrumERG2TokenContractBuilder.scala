@@ -1,20 +1,20 @@
 package org.guapswap.commons.dex.spectrum.spectrum_builders.contract_builders
 
-import org.ergoplatform.appkit.scalaapi.ErgoValueBuilder
-import org.ergoplatform.appkit.{Address, BlockchainContext, ConstantsBuilder, ErgoContract, ErgoType, ErgoValue, JavaHelpers}
+import org.ergoplatform.appkit.{Address, BlockchainContext, ConstantsBuilder, ErgoContract, ErgoValue, JavaHelpers}
 import org.guapswap.commons.dex.spectrum.{SpectrumDex, SpectrumErgoPool}
 import org.guapswap.commons.ergo.ErgoBlockchainAssets
 import sigmastate.{SType, Values}
 import sigmastate.Values.ErgoTree
 import sigmastate.basics.DLogProtocol.ProveDlog
 import special.collection.Coll
+import special.sigma.SigmaProp
 
 case class SpectrumERG2TokenContractBuilder(
                                            exFeePerTokenDenom: Long,
                                            delta: Long,
                                            baseAmount: Long,
                                            feeNum: Int,
-                                           refundProp: ErgoValue[ProveDlog],
+                                           refundProp: ErgoValue[SigmaProp],
                                            spectrumIsQuote: Boolean,
                                            maxExFee: Long,
                                            poolNFT: ErgoValue[Coll[java.lang.Byte]],
@@ -76,23 +76,26 @@ object SpectrumERG2TokenContractBuilder {
    */
   def apply(apiUrl: String,
             swapAssetTicker: String,
-            baseAmount: Long,
+            baseAmountIncludingFees: Long,
             slippageTolerancePercentage: Double,
             nitro: Double,
             spectrumMinerFee: Long,
             redeemerAddress: String,
             refundAddress: String
-           )(implicit ctx: BlockchainContext): SpectrumERG2TokenContractBuilder = {
+           ): SpectrumERG2TokenContractBuilder = {
 
     val redeemerPropBytes: ErgoValue[Coll[java.lang.Byte]] = ErgoValue.of(Address.create(redeemerAddress).toPropositionBytes)
-    val refundPropBytes: ErgoValue[ProveDlog] = ErgoValue.of(ProveDlog(Address.create(refundAddress).getPublicKey.value))
+    val refundPropBytes: ErgoValue[SigmaProp] = ErgoValue.of(ProveDlog(Address.create(refundAddress).getPublicKey.value))
+
     val swapBuyContract: ErgoTree = JavaHelpers.decodeStringToErgoTree(n2t_v3_swapsell_ergotree)
     val swapBuyConstants: IndexedSeq[Values.Constant[SType]] = swapBuyContract.constants
 
     val assetPool: SpectrumErgoPool = SpectrumDex.getPoolFromAssetTicker(swapAssetTicker).asInstanceOf[SpectrumErgoPool]
     val assetAmounts: (Long, Long) = assetPool.getPoolInfo(apiUrl)
-    val minQuoteAmount: Long = AbstractSpectrumSwapContractBuilder.calcMinOutputAmount(baseAmount, slippageTolerancePercentage, assetAmounts._1, assetAmounts._2, assetPool.feeNum, SpectrumDex.SPECTRUM_ERGO_POOL_FEE_DENOM)
     val minExecutionFee: Long = AbstractSpectrumSwapContractBuilder.calcMinExecutionFee(spectrumMinerFee)
+    val maxExecutionFee: Long = AbstractSpectrumSwapContractBuilder.calcMaxExecutionFee(minExecutionFee, nitro).toLong
+    val baseAmount: Long = baseAmountIncludingFees - maxExecutionFee
+    val minQuoteAmount: Long = AbstractSpectrumSwapContractBuilder.calcMinOutputAmount(baseAmount, slippageTolerancePercentage, assetAmounts._1, assetAmounts._2, assetPool.feeNum, SpectrumDex.SPECTRUM_ERGO_POOL_FEE_DENOM)
     val swapExtremums: Option[(Double, (Long, Long, Long, Long))] = AbstractSpectrumSwapContractBuilder.calcSwapExtremums(minExecutionFee, nitro, minQuoteAmount)
     //val dexFeePerTokenFraction: (BigInt, BigInt) = GuapSwapUtils.decimalToFraction(BigDecimal(swapExtremums.get._1))
     val exFeePerTokenDenom: Long = AbstractSpectrumSwapContractBuilder.isoSConstantToErgoValue.to(swapBuyConstants(1)).getValue.asInstanceOf[Long]
