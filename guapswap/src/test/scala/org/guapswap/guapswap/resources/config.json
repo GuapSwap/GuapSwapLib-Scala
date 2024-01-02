@@ -1,0 +1,57 @@
+{
+  "node": {
+    "networkType": "mainnet",
+    "nodeApiUrl": "https://ergo-mainnet-node.guapswap.org/",
+    "nodeApiKey": "",
+    "explorerUrl": "https://api.ergoplatform.com/",
+    "mnemonic": "",
+    "mnemonicIndex": 0
+  },
+  "guapswapSettings": {
+    "protocolSettings": {
+      "thresholdInNanoERG": 1000000000,
+      "swapIntervalInHours": 1,
+      "guapswapMinerFeeInNanoERG": 20000000
+    },
+    "miningPortfolioSettings": {
+      "guapswaps": [
+        {
+          "tokenTicker": "SigUSD",
+          "percentageOfPayout": 0.6,
+          "dexSettings": {
+            "dexChoice": "spectrum",
+            "spectrumDexSettings": {
+              "slippageTolerancePercentage": 0.03,
+              "nitro": 1.2,
+              "spectrumMinerFeeInNanoERG": 20000000
+            }
+          }
+        },
+        {
+          "tokenTicker": "EPOS",
+          "percentageOfPayout": 0.2,
+          "dexSettings": {
+            "dexChoice": "spectrum",
+            "spectrumDexSettings": {
+              "slippageTolerancePercentage": 0.03,
+              "nitro": 1.2,
+              "spectrumMinerFeeInNanoERG": 20000000
+            }
+          }
+        },
+        {
+          "tokenTicker": "SPF",
+          "percentageOfPayout": 0.2,
+          "dexSettings": {
+            "dexChoice": "spectrum",
+            "spectrumDexSettings": {
+              "slippageTolerancePercentage": 0.03,
+              "nitro": 1.2,
+              "spectrumMinerFeeInNanoERG": 20000000
+            }
+          }
+        }
+      ]
+    }
+  }
+}
