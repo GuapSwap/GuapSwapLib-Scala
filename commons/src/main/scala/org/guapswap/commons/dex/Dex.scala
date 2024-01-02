@@ -5,9 +5,9 @@ package org.guapswap.commons.dex
  */
 trait Dex {
 
-  var _dexName: String
-  var _dexAssets: DexAssets
-  var _dexPools: DexPools
+  val _dexName: String
+  val _dexAssets: DexAssets
+  val _dexPools: DexPools
 
   def getPoolFromAssetTicker(assetTicker: String): DexPool
 

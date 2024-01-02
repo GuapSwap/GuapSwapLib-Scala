@@ -6,6 +6,5 @@ import org.guapswap.guapswap.configs.setup_config.settings.mining_portfolio_sett
 case class GuapSwapConfig(
                     tokenTicker: String,
                     percentageOfPayout: Double,
-                    receiverAddress: String,
                     dexSettings: GuapSwapDexSettingsConfig
                     )

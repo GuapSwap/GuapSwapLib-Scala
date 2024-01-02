@@ -6,5 +6,5 @@ case class NodeConfig(
                        nodeApiKey: String,
                        explorerUrl: String,
                        mnemonic: String,
-                       mnemonicIndex: String
+                       mnemonicIndex: Int
                      )

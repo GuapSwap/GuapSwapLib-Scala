@@ -11,5 +11,19 @@ object SpectrumErgoPools extends DexPools {
         995L
     )
 
+    val ERG_2_SPF: DexPool = SpectrumErgoPool(
+        "f40afb6f877c40a30c8637dd5362227285738174151ce66d6684bc1b727ab6cf",
+        SpectrumErgoAssets.ERG,
+        SpectrumErgoAssets.SPF,
+        997L
+    )
+
+    val ERG_2_EPOS: DexPool = SpectrumErgoPool(
+        "04f468174eddbc68bce3f0965dd14bc6ed1443f5a405ec7f7f9925d999370b97",
+        SpectrumErgoAssets.ERG,
+        SpectrumErgoAssets.EPOS,
+        997L
+    )
+
 
 }
