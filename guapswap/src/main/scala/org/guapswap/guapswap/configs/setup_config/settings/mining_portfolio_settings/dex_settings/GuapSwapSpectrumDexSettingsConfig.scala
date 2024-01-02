@@ -4,5 +4,4 @@ case class GuapSwapSpectrumDexSettingsConfig (
                                              slippageTolerancePercentage: Double,
                                              nitro: Double,
                                              spectrumMinerFeeInNanoERG: Long,
-                                             redeemerAddress: String
                                              )
